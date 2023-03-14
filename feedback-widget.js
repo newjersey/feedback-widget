@@ -59,7 +59,7 @@ const JSON_HEADER = {
   "Content-Type": "application/json",
 };
 
-class NJPageFeedback extends window.HTMLElement {
+class NJFeedbackWidget extends window.HTMLElement {
   constructor() {
     super();
     this.rating = false;
@@ -458,4 +458,4 @@ class NJPageFeedback extends window.HTMLElement {
   }
 }
 
-window.customElements.define("nj-page-feedback", NJPageFeedback);
+window.customElements.define("feedback-widget", NJFeedbackWidget);

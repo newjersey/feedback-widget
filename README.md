@@ -1,20 +1,20 @@
-# In-page feedback component
+# NJ Feedback widget
 
 A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that can be added to any New Jersey page to get quick, in-page feedback from the user. This is inspired by the [CA Design System's similar component](https://designsystem.webstandards.ca.gov/components/page-feedback/readme/). It is mobile-responsive, accessible (tested with [axe](https://www.deque.com/axe/) tool), and supports English and Spanish language.
 
 ## How to use it
 
-1. Download the `nj-page-feedback.js` file. This is the only file you need.
+1. Download the `feedback-widget.js` file. This is the only file you need.
 2. In your own page's HTML, load the JS file so that you can use the component. The `defer` attribute is to wait until the page content is parsed before loading the JS, since this is not an essential element.
 
 ```javascript
-<script src="nj-page-feedback.js" defer></script>
+<script src="feedback-widget.js" defer></script>
 ```
 
 3. Add the following tags to your page's HTML code, wherever you want to place the component, most likely at the bottom of a page. It's just like using any other HTML tag.
 
 ```html
-<nj-page-feedback></nj-page-feedback>
+<feedback-widget></feedback-widget>
 ```
 
 ## How it works
@@ -41,3 +41,11 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
   e.target.dispatchEvent(customEvent);
 });
 ```
+
+## Where it's used
+
+- NJ DOL, MyLeaveBenefits, Maternity Timeline Tool (Welcome) - https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-welcome.shtml
+- NJ DOL, MyLeaveBenefits, Maternity Timeline Tool (Tool) - https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-tool.shtml
+- NJ DOL, MyLeaveBenefits, What happens after I apply? - https://nj.gov/labor/myleavebenefits/worker/resources/claims-status.shtml
+- NJ DOL, MyLeaveBenefits, Announcing a new way to log in - https://www.nj.gov/labor/myleavebenefits/worker/resources/login-update.shtml
+- NJ DOL, UI Claim Status - https://uistatus.dol.state.nj.us/
