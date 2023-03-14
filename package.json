@@ -1,0 +1,19 @@
+{
+  "name": "feedback-widget",
+  "version": "1.0.0",
+  "description": "This is the code repository for the Feedback Widget web component",
+  "main": "nj-page-feedback.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newjersey/feedback-widget.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/newjersey/feedback-widget/issues"
+  },
+  "homepage": "https://github.com/newjersey/feedback-widget#readme"
+}
