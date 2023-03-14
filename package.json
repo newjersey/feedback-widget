@@ -1,6 +1,6 @@
 {
   "name": "@newjersey/feedback-widget",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Feedback widget to add to a web page, from the New Jersey Office of Innovatio",
   "main": "feedback-widget.min.js",
   "scripts": {
