@@ -4,11 +4,14 @@ A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web
 
 ## How to use it
 
-1. Download the `feedback-widget.js` file. This is the only file you need.
-2. In your own page's HTML, load the JS file so that you can use the component. The `defer` attribute is to wait until the page content is parsed before loading the JS, since this is not an essential element.
+1. If using a project with npm, you can install the latest version via the command `npm i @newjersey/feedback-widget --save`. Without npm, skip to Step 2.
+2. If you're not using npm, load the JS file with a script tag - the `defer` attribute is to wait until the page content is parsed before loading the JS, since this is not an essential element.
 
 ```javascript
-<script src="feedback-widget.js" defer></script>
+<script
+  src="https://unpkg.com/@newjersey/feedback-widget@0.1.0/feedback-widget.min.js"
+  defer
+></script>
 ```
 
 3. Add the following tags to your page's HTML code, wherever you want to place the component, most likely at the bottom of a page. It's just like using any other HTML tag.
