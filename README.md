@@ -52,3 +52,10 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 - NJ DOL, MyLeaveBenefits, What happens after I apply? - https://nj.gov/labor/myleavebenefits/worker/resources/claims-status.shtml
 - NJ DOL, MyLeaveBenefits, Announcing a new way to log in - https://www.nj.gov/labor/myleavebenefits/worker/resources/login-update.shtml
 - NJ DOL, UI Claim Status - https://uistatus.dol.state.nj.us/
+
+## How to publish new version of package
+
+1. Go the the Draft Release action at https://github.com/newjersey/feedback-widget/actions/workflows/draft-release.yml, click Run workflow (you need write permissions to do this). Choose the branch (`main`) and the semver level of the new version (patch, minor, major).
+2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the https://github.com/newjersey/feedback-widget/releases page.
+3. On the releases page, click to Edit the release, and update the description if needed. Click Publish. This will trigger the publish-release Github Actions workflow.
+4. Once the workflow is completed, confirm that the package is updated on NPM registry. https://www.npmjs.com/package/@newjersey/feedback-widget
