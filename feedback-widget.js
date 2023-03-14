@@ -17,7 +17,8 @@ const LANG_TO_CONTENT = {
     commentPromptNegative:
       "Sorry to hear that. What were you looking for today?",
     commentPromptDisclaimer:
-      'Your feedback helps improve this web page. For questions about a claim, <a target="_blank" rel="noopener noreferrer" href="https://nj.gov/labor/myunemployment/help/contact-us/">contact an agent</a>.',
+      "Your feedback helps improve this web page. For questions about a claim, ",
+    commentPromptDisclaimerLink: "contact an agent",
     commentSubmit: "Send feedback",
     commentSubmitLoading: "Sending...",
     commentConfirmation: "Thanks for sharing your thoughts!",
@@ -39,7 +40,8 @@ const LANG_TO_CONTENT = {
     commentPromptNegative:
       "Lamentamos escuchar eso. ¿De que se trataba su búsqueda?",
     commentPromptDisclaimer:
-      'Tus comentarios ayudan a mejorar nuestro sitio de web. Si tienes preguntas sobre un reclamo, <a target="_blank" rel="noopener noreferrer" href="https://nj.gov/labor/myunemployment/help/contact-us/">póngase en contacto con un agente</a>.',
+      "Tus comentarios ayudan a mejorar nuestro sitio de web. Si tienes preguntas sobre un reclamo, ",
+    commentPromptDisclaimerLink: "póngase en contacto con un agente",
     commentSubmit: "Enviar comentarios",
     commentSubmitLoading: "Enviando...",
     commentConfirmation: "¡Gracias por compartir tus ideas!",
@@ -234,81 +236,98 @@ class NJFeedbackWidget extends window.HTMLElement {
 
   getHTML() {
     const content = LANG_TO_CONTENT[this.language];
+    const contactLink = this.hasAttribute("contact-link")
+      ? this.getAttribute("contact-link")
+      : "https://www.nj.gov/nj/feedback.html";
     const html = /*html*/ `
-      <div class="feedback-container">
-        <div id="ratingPrompt" class="flex-box">
-          <span class="feedback-text">${content.ratingPrompt}</span>
-          <div class="feedback-button-group">
-            <button id="yesButton" class="feedback-button">
-              ${content.ratingPositive}
-            </button>
-            <button id="noButton" class="feedback-button">
-              ${content.ratingNegative}
-            </button>
-          </div>
-        </div>
-        <div id="commentPrompt">
-          <form id="commentForm">
-            <div class="grid-box">
-              <div>
-                <label id="commentPromptText" for="comment" class="feedback-text"
-                  >${content.commentPromptPositive}</label
-                >
-                <p class="disclaimer-text">${content.commentPromptDisclaimer}</p>
-              </div>
-              <div>
-                <textarea
-                  type="text"
-                  id="comment"
-                  name="comment"
-                  class="feedback-input"
-                  required
-                ></textarea>
-                <div id="commentSubmitError" class="error-text">${content.errorMessage}</div>
-                <button
-                  id="commentSubmit"
-                  class="feedback-button float-right submit-button"
-                  type="submit"
-                >
-                  ${content.commentSubmit}
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div id="emailPrompt">
-          <form id="emailForm">
-            <div class="grid-box">
-              <div>
-                <div class="feedback-text">${content.commentConfirmation}</div>
-                <p class="disclaimer-text">${content.emailPrompt}</p>
-              </div>
-              <div>
-                <label for="email" class="email-label">${content.emailLabel}</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  class="feedback-input email-input"
-                  required
-                />
-                <div id="emailSubmitError" class="error-text">${content.errorMessage}</div>
-                <button
-                  id="emailSubmit"
-                  class="feedback-button float-right submit-button"
-                  type="submit"
-                >
-                  ${content.emailSubmit}
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div id="emailConfirmation" class="email-confirmation">
-          <img src="https://beta.nj.gov/files/feedback-widget/check_icon.svg" alt="" />
-          <div class="email-confirmation-text">${content.emailConfirmation}</div>
+    <div class="feedback-container">
+      <div id="ratingPrompt" class="flex-box">
+        <span class="feedback-text">${content.ratingPrompt}</span>
+        <div class="feedback-button-group">
+          <button id="yesButton" class="feedback-button">
+            ${content.ratingPositive}
+          </button>
+          <button id="noButton" class="feedback-button">
+            ${content.ratingNegative}
+          </button>
         </div>
       </div>
+      <div id="commentPrompt">
+        <form id="commentForm">
+          <div class="grid-box">
+            <div>
+              <label id="commentPromptText" for="comment" class="feedback-text"
+                >${content.commentPromptPositive}</label
+              >
+              <p class="disclaimer-text">
+                ${content.commentPromptDisclaimer}<a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="${contactLink}"
+                  >${content.commentPromptDisclaimerLink}</a
+                >.
+              </p>
+            </div>
+            <div>
+              <textarea
+                type="text"
+                id="comment"
+                name="comment"
+                class="feedback-input"
+                required
+              ></textarea>
+              <div id="commentSubmitError" class="error-text">
+                ${content.errorMessage}
+              </div>
+              <button
+                id="commentSubmit"
+                class="feedback-button float-right submit-button"
+                type="submit"
+              >
+                ${content.commentSubmit}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="emailPrompt">
+        <form id="emailForm">
+          <div class="grid-box">
+            <div>
+              <div class="feedback-text">${content.commentConfirmation}</div>
+              <p class="disclaimer-text">${content.emailPrompt}</p>
+            </div>
+            <div>
+              <label for="email" class="email-label">${content.emailLabel}</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="feedback-input email-input"
+                required
+              />
+              <div id="emailSubmitError" class="error-text">
+                ${content.errorMessage}
+              </div>
+              <button
+                id="emailSubmit"
+                class="feedback-button float-right submit-button"
+                type="submit"
+              >
+                ${content.emailSubmit}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="emailConfirmation" class="email-confirmation">
+        <img
+          src="https://beta.nj.gov/files/feedback-widget/check_icon.svg"
+          alt=""
+        />
+        <div class="email-confirmation-text">${content.emailConfirmation}</div>
+      </div>
+    </div>
     `;
     return html;
   }

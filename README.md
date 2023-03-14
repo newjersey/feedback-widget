@@ -14,10 +14,12 @@ A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web
 ></script>
 ```
 
-3. Add the following tags to your page's HTML code, wherever you want to place the component, most likely at the bottom of a page. It's just like using any other HTML tag.
+3. Add the following tags to your page's HTML code, wherever you want to place the component, most likely at the bottom of a page. It's just like using any other HTML tag. If you'd like to direct users' specific/personal questions to a special form or website, provide the URL for that with the `contact-link` attribute. This will be used on Step 2 in the User flow below. If not given, a default link will be used (https://nj.gov/nj/feedback.html).
 
 ```html
-<feedback-widget></feedback-widget>
+<feedback-widget
+  contact-link="https://www.example.com/contact"
+></feedback-widget>
 ```
 
 ## How it works
@@ -59,3 +61,11 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the https://github.com/newjersey/feedback-widget/releases page.
 3. On the releases page, click to Edit the release, and update the description if needed. Click Publish. This will trigger the publish-release Github Actions workflow.
 4. Once the workflow is completed, confirm that the package is updated on NPM registry. https://www.npmjs.com/package/@newjersey/feedback-widget
+
+### Minifying the JS file
+
+Before pushing changes to `feedback-widget.js`, make sure you update the minified file (this will be automated eventually).
+
+1. `npm install uglify-js -g` (global install, not part of npm project)
+2. `cd feedback-widget && nvm use 16`
+3. `uglifyjs feedback-widget.js -c -o feedback-widget.min.js`
