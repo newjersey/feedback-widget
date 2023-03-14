@@ -2,7 +2,7 @@
   "name": "@newjersey/feedback-widget",
   "version": "0.1.0",
   "description": "This is the code repository for the Feedback Widget web component",
-  "main": "feedback-widget.js",
+  "main": "feedback-widget.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,8 +15,5 @@
   "bugs": {
     "url": "https://github.com/newjersey/feedback-widget/issues"
   },
-  "homepage": "https://github.com/newjersey/feedback-widget#readme",
-  "files": [
-    "feedback-widget.min.js"
-  ]
+  "homepage": "https://github.com/newjersey/feedback-widget#readme"
 }
