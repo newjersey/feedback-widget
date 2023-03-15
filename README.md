@@ -4,17 +4,50 @@ A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web
 
 ## How to use it
 
-1. If using a project with npm, you can install the latest version via the command `npm i @newjersey/feedback-widget --save`. Without npm, skip to Step 2.
-2. If you're not using npm, load the JS file with a script tag - the `defer` attribute is to wait until the page content is parsed before loading the JS, since this is not an essential element.
+### With Node/NPM
+
+1. Install the latest version via the command `npm i @newjersey/feedback-widget --save`.
+2. In the file you want to refer to the widget (for example, `App.tsx`/`App.jsx` in Create React App), import the JavaScript file to be used.
+
+```javascript
+import "@newjersey/feedback-widget/feedback-widget.min.js";
+```
+
+3. If using TypeScript, add the following type definition to the same file that you imported
+
+```typescript
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "feedback-widget": React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      >;
+    }
+  }
+}
+```
+
+4. Render the feedback widget by adding the following to your HTML/JSX
+
+```html
+<feedback-widget
+  contact-link="https://www.example.com/contact"
+></feedback-widget>
+```
+
+### For website without NPM
+
+1. Load the JS file from a CDN link by adding a script tag to your HTML. You can change the version number after the @ sign to match your desired release (https://github.com/newjersey/feedback-widget/releases).
 
 ```javascript
 <script
-  src="https://unpkg.com/@newjersey/feedback-widget@0.1.0/feedback-widget.min.js"
+  src="https://unpkg.com/@newjersey/feedback-widget@0.2.0/feedback-widget.min.js"
   defer
 ></script>
 ```
 
-3. Add the following tags to your page's HTML code, wherever you want to place the component, most likely at the bottom of a page. It's just like using any other HTML tag. If you'd like to direct users' specific/personal questions to a special form or website, provide the URL for that with the `contact-link` attribute. This will be used on Step 2 in the User flow below. If not given, a default link will be used (https://nj.gov/nj/feedback.html).
+2. Render the feedback widget by adding the following tag in your HTML (likely at the bottom of the page). It's just like using any other HTML tag.
 
 ```html
 <feedback-widget
@@ -29,7 +62,7 @@ When the user interacts with the feedback widget, our Feedback API (https://gith
 ### User flow
 
 1. Widget will ask user if they found what they were looking for on page. User can select "Yes" or "No". (Data recorded: page URL, time of interaction, and Yes/No selection)
-2. Widget will ask user if they want to share an open-ended feedback. User can submit freeform text. (Data recorded: submitted comment)
+2. Widget will ask user if they want to share an open-ended feedback. User can submit freeform text. (Data recorded: submitted comment) Note: If you'd like to direct users' specific/personal questions to a special form or website, provide the URL for that with the `contact-link` attribute. This will be used on Step 2 in the User flow below. If not given, a default link will be used (https://nj.gov/nj/feedback.html).
 3. Widget will ask user if they want to share their email to join a user testing group. User can submit email address. (Data recorded: email address)
 4. Widget will thank user for sharing
 
