@@ -17,8 +17,8 @@ const LANG_TO_CONTENT = {
     commentPromptNegative:
       "Sorry to hear that. What were you looking for today?",
     commentPromptDisclaimer:
-      "Your feedback helps improve this web page. For questions about a claim, ",
-    commentPromptDisclaimerLink: "contact an agent",
+      "Your feedback helps improve this web page. For specific questions about your situation, ",
+    commentPromptDisclaimerLink: "contact us",
     commentSubmit: "Send feedback",
     commentSubmitLoading: "Sending...",
     commentConfirmation: "Thanks for sharing your thoughts!",
@@ -40,13 +40,13 @@ const LANG_TO_CONTENT = {
     commentPromptNegative:
       "Lamentamos escuchar eso. ¿De que se trataba su búsqueda?",
     commentPromptDisclaimer:
-      "Tus comentarios ayudan a mejorar nuestro sitio de web. Si tienes preguntas sobre un reclamo, ",
-    commentPromptDisclaimerLink: "póngase en contacto con un agente",
+      "Sus comentarios nos ayudan a mejorar nuestro sitio de web. Si tiene preguntas específicas sobre su situación, ",
+    commentPromptDisclaimerLink: "por favor póngase en contacto con nosotros",
     commentSubmit: "Enviar comentarios",
     commentSubmitLoading: "Enviando...",
     commentConfirmation: "¡Gracias por compartir tus ideas!",
     emailPrompt:
-      "To hear about paid feedback opportunities in the future, join our user testing list.Para conocer mas oportunidades de comentarios pagados en el futuro, sea parte de nuestra lista de prueba de usuarios.",
+      "Para conocer mas oportunidades de comentarios pagados en el futuro, sea parte de nuestra lista de prueba de usuarios.",
     emailLabel: "Dirección de correo electrónico",
     emailSubmit: "Sea parte de la lista",
     emailSubmitLoading: "Enviando...",
