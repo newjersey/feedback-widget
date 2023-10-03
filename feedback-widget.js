@@ -113,12 +113,13 @@ class NJFeedbackWidget extends window.HTMLElement {
       this.hideElement("#commentSubmitError");
 
       const comment = e.target.elements.comment.value;
-      const postData = this.retryRating
-        ? { comment, rating: this.rating, pageURL: window.location.href }
-        : {
-            feedbackId: this.feedbackId,
-            comment,
-          };
+      const postData =
+        this.retryRating || this.feedbackId == null
+          ? { comment, rating: this.rating, pageURL: window.location.href }
+          : {
+              feedbackId: this.feedbackId,
+              comment,
+            };
       fetch(`${API_URL}/comment`, {
         method: "POST",
         headers: JSON_HEADER,
@@ -131,12 +132,10 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.showElement("#emailPrompt");
           } else if (data.message.startsWith("Error")) {
             this.showElement("#commentSubmitError");
-            logGoogleEvent("Error - Submitted comment");
           }
         })
         .catch((e) => {
           this.showElement("#commentSubmitError");
-          logGoogleEvent("Error - Submitted comment");
         })
         .finally(() => {
           submitButton.disabled = false;
@@ -171,12 +170,10 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.showElement("#emailConfirmation", "flex");
           } else if (data.message.startsWith("Error")) {
             this.showElement("#emailSubmitError");
-            logGoogleEvent("Error - Submitted email");
           }
         })
         .catch((e) => {
           this.showElement("#emailSubmitError");
-          logGoogleEvent("Error - Submitted email");
         })
         .finally(() => {
           submitButton.disabled = false;
@@ -193,37 +190,42 @@ class NJFeedbackWidget extends window.HTMLElement {
     }
     this.hideElement("#ratingPrompt");
     this.showElement("#commentPrompt");
-    document.getElementById("commentSubmit").disabled = true;
 
-    const postData = {
-      pageURL: window.location.href,
-      rating,
-    };
-    fetch(`${API_URL}/rating`, {
-      method: "POST",
-      headers: JSON_HEADER,
-      body: JSON.stringify(postData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.message === "Success" && data.feedbackId != null) {
-          this.feedbackId = data.feedbackId;
-          logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
-        } else if (data.message.startsWith("Error")) {
+    let onlySaveRatingToAnalytics = false;
+    if (this.hasAttribute("only-save-rating-to-analytics")) {
+      onlySaveRatingToAnalytics =
+        this.getAttribute("only-save-rating-to-analytics") === "true";
+    }
+
+    if (onlySaveRatingToAnalytics) {
+      logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
+    } else {
+      document.getElementById("commentSubmit").disabled = true;
+      const postData = {
+        pageURL: window.location.href,
+        rating,
+      };
+      fetch(`${API_URL}/rating`, {
+        method: "POST",
+        headers: JSON_HEADER,
+        body: JSON.stringify(postData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message === "Success" && data.feedbackId != null) {
+            this.feedbackId = data.feedbackId;
+            logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
+          } else if (data.message.startsWith("Error")) {
+            this.retryRating = true;
+          }
+        })
+        .catch((e) => {
           this.retryRating = true;
-          logGoogleEvent(
-            "Error - Clicked initial button",
-            rating ? "Yes" : "No"
-          );
-        }
-      })
-      .catch((e) => {
-        this.retryRating = true;
-        logGoogleEvent("Error - Clicked initial button", rating ? "Yes" : "No");
-      })
-      .finally(() => {
-        document.getElementById("commentSubmit").disabled = false;
-      });
+        })
+        .finally(() => {
+          document.getElementById("commentSubmit").disabled = false;
+        });
+    }
   }
 
   showElement(selector, displayType = "block") {

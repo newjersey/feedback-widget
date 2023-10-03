@@ -1,8 +1,43 @@
-# NJ Feedback widget
+# New Jersey Feedback Widget
 
-A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that can be added to any New Jersey page to get quick, in-page feedback from the user. This is inspired by the [CA Design System's similar component](https://designsystem.webstandards.ca.gov/components/page-feedback/readme/). It is mobile-responsive, accessible (tested with [axe](https://www.deque.com/axe/) tool), and supports English and Spanish language.
+## About this component
 
-## How to use it
+A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that can be added to any New Jersey page to get quick, in-page feedback from the user. This is inspired by the [CA Design System's similar component](https://designsystem.webstandards.ca.gov/components/page-feedback/readme/). It is mobile-responsive, accessible (tested with [axe](https://www.deque.com/axe/) tool), and supports English and Spanish language. See the [Feedback API](https://github.com/newjersey/feedback-api) Github repository for the code that handles and saves this data.
+
+### User flow
+
+1. _Rating_: At the bottom of a webpage, the widget asks user to rate their experience of the page with "Yes" and "No" buttons. Upon clicking an option, the rating is saved to a Google Sheet and Google Analytics (page URL, datetime, and selection). Note: If you want to save ratings _without comments_ to Google Analytics only, provide the `only-save-ratings-to-analytics="true"` attribute value.
+2. _Comment_: Widget asks user to optionally share feedback in a free text field. Upon submitting, this text is recorded to Google Sheets. Note: Users often have specific questions about their situation rather than feedback. To direct users to your contact page, provide its URL via the `contact-link` attribute.
+3. _Email_: Widget asks user to optionally share their email to join a user testing group. Upon submitting, this email is recorded to Google Sheets.
+
+### Spanish content
+
+The component supports English and Spanish content and switching between the two. To switch the language of the component's content, use JavaScript to send a custom event using the code below. For example, we can send this event in a click handler for a button.
+
+```javascript
+document.getElementById("languageButton").addEventListener("click", (e) => {
+  const customEvent = new CustomEvent("changeLanguage", {
+    detail: "es" /* "en" for English or "es" for Spanish */,
+    bubbles: true,
+  });
+  e.target.dispatchEvent(customEvent);
+});
+```
+
+### Where it's used
+
+- NJ DOL, TDI/FLI, MyLeaveBenefits, [Maternity Timeline Tool (Welcome)](https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-welcome.shtml)
+- NJ DOL, TDI/FLI, MyLeaveBenefits, [Maternity Timeline Tool (Tool)](https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-tool.shtml)
+- NJ DOL, TDI/FLI, MyLeaveBenefits, [What happens after I apply?](https://nj.gov/labor/myleavebenefits/worker/resources/claims-status.shtml)
+- NJ DOL, TDI/FLI, MyLeaveBenefits, [Announcing a new way to log in](https://www.nj.gov/labor/myleavebenefits/worker/resources/login-update.shtml)
+- NJ DOL, UI, [Claim Status](https://uistatus.dol.state.nj.us/)
+
+### Customizable attributes
+
+- `contact-link` - Assign to a string with the URL that you want to direct users to if they have a specific question. By default, a the following URL will be used: https://nj.gov/nj/feedback.html.
+- `only-save-ratings-to-analytics` - Rather than saving ratings without comments to the Google Sheets database, you can choose to only save to Google Analytics (whichever property is added to your site) with the value `"true"`. `"true"` is recommended if expecting high traffic. Defaults to `"false"`.
+
+## For users: how to add this to your website
 
 ### With Node/NPM
 
@@ -55,45 +90,7 @@ declare global {
 ></feedback-widget>
 ```
 
-## How it works
-
-When the user interacts with the feedback widget, our Feedback API (https://github.com/newjersey/feedback-api) will then add data (see below) to our Google Sheets database, which can then be visualized in Looker Studio.
-
-### User flow
-
-1. Widget will ask user if they found what they were looking for on page. User can select "Yes" or "No". (Data recorded: page URL, time of interaction, and Yes/No selection)
-2. Widget will ask user if they want to share an open-ended feedback. User can submit freeform text. (Data recorded: submitted comment) Note: If you'd like to direct users' specific/personal questions to a special form or website, provide the URL for that with the `contact-link` attribute. This will be used on Step 2 in the User flow below. If not given, a default link will be used (https://nj.gov/nj/feedback.html).
-3. Widget will ask user if they want to share their email to join a user testing group. User can submit email address. (Data recorded: email address)
-4. Widget will thank user for sharing
-
-### Multi-language support
-
-The component supports English and Spanish content and switching between the two. If you'd like to switch the language of the component's content, use JavaScript to send a custom event using the code below. For example, we can send this event in a click handler for a button.
-
-```javascript
-document.getElementById("languageButton").addEventListener("click", (e) => {
-  const customEvent = new CustomEvent("changeLanguage", {
-    detail: "es" /* "en" for English or "es" for Spanish */,
-    bubbles: true,
-  });
-  e.target.dispatchEvent(customEvent);
-});
-```
-
-## Where it's used
-
-- NJ DOL, MyLeaveBenefits, Maternity Timeline Tool (Welcome) - https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-welcome.shtml
-- NJ DOL, MyLeaveBenefits, Maternity Timeline Tool (Tool) - https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-tool.shtml
-- NJ DOL, MyLeaveBenefits, What happens after I apply? - https://nj.gov/labor/myleavebenefits/worker/resources/claims-status.shtml
-- NJ DOL, MyLeaveBenefits, Announcing a new way to log in - https://www.nj.gov/labor/myleavebenefits/worker/resources/login-update.shtml
-- NJ DOL, UI Claim Status - https://uistatus.dol.state.nj.us/
-
-## How to publish new version of package
-
-1. Go the the Draft Release action at https://github.com/newjersey/feedback-widget/actions/workflows/draft-release.yml, click Run workflow (you need write permissions to do this). Choose the branch (`main`) and the semver level of the new version (patch, minor, major).
-2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the https://github.com/newjersey/feedback-widget/releases page.
-3. On the releases page, click to Edit the release, and update the description if needed. Click Publish. This will trigger the publish-release Github Actions workflow.
-4. Once the workflow is completed, confirm that the package is updated on NPM registry. https://www.npmjs.com/package/@newjersey/feedback-widget
+## For developers: how to improve this component
 
 ### Minifying the JS file
 
@@ -102,3 +99,10 @@ Before pushing changes to `feedback-widget.js`, make sure you update the minifie
 1. `npm install uglify-js -g` (global install, not part of npm project)
 2. `cd feedback-widget && nvm use 16`
 3. `uglifyjs feedback-widget.js -c -o feedback-widget.min.js`
+
+### Publishing a new version of the package
+
+1. Go the the Draft Release action at https://github.com/newjersey/feedback-widget/actions/workflows/draft-release.yml, click Run workflow (you need write permissions to do this). Choose the branch (`main`) and the semver level of the new version (patch, minor, major).
+2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the https://github.com/newjersey/feedback-widget/releases page.
+3. On the releases page, click to Edit the release, and update the description if needed. Click Publish. This will trigger the publish-release Github Actions workflow.
+4. Once the workflow is completed, confirm that the package is updated on NPM registry. https://www.npmjs.com/package/@newjersey/feedback-widget
