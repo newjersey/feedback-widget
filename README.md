@@ -6,8 +6,8 @@ A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web
 
 ### User flow
 
-1. _Rating_: At the bottom of a webpage, the widget asks user to rate their experience of the page with "Yes" and "No" buttons. Upon clicking an option, the rating is saved to a Google Sheet and Google Analytics (page URL, datetime, and selection). Note: If you want to save ratings _without comments_ to Google Analytics only, provide the `only-save-ratings-to-analytics="true"` attribute value.
-2. _Comment_: Widget asks user to optionally share feedback in a free text field. Upon submitting, this text is recorded to Google Sheets. Note: Users often have specific questions about their situation rather than feedback. To direct users to your contact page, provide its URL via the `contact-link` attribute.
+1. _Rating_: At the bottom of a webpage, the widget asks user to rate their experience of the page with "Yes" and "No" buttons. Upon clicking an option, the rating is saved to a Google Sheet and Google Analytics (page URL, datetime, and selection). Note: See `only-save-rating-to-analytics` attribute below for customization.
+2. _Comment_: Widget asks user to optionally share feedback in a free text field. Upon submitting, this text is recorded to Google Sheets. Note: Users often have specific questions about their situation rather than feedback. Note: See `contact-link` attribute below for customization.
 3. _Email_: Widget asks user to optionally share their email to join a user testing group. Upon submitting, this email is recorded to Google Sheets.
 
 ### Spanish content
@@ -35,7 +35,7 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 ### Customizable attributes
 
 - `contact-link` - Assign to a string with the URL that you want to direct users to if they have a specific question. By default, a the following URL will be used: https://nj.gov/nj/feedback.html.
-- `only-save-ratings-to-analytics` - Rather than saving ratings without comments to the Google Sheets database, you can choose to only save to Google Analytics (whichever property is added to your site) with the value `"true"`. `"true"` is recommended if expecting high traffic. Defaults to `"false"`.
+- `only-save-rating-to-analytics` - Rather than saving ratings without comments to the Google Sheets database, you can choose to only save to Google Analytics (whichever property is added to your site) with the value `"true"`. `"true"` is recommended if expecting high traffic. Defaults to `"false"`.
 
 ## For users: how to add this to your website
 
@@ -102,7 +102,7 @@ Before pushing changes to `feedback-widget.js`, make sure you update the minifie
 
 ### Publishing a new version of the package
 
-1. Go the the Draft Release action at https://github.com/newjersey/feedback-widget/actions/workflows/draft-release.yml, click Run workflow (you need write permissions to do this). Choose the branch (`main`) and the semver level of the new version (patch, minor, major).
-2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the https://github.com/newjersey/feedback-widget/releases page.
-3. On the releases page, click to Edit the release, and update the description if needed. Click Publish. This will trigger the publish-release Github Actions workflow.
-4. Once the workflow is completed, confirm that the package is updated on NPM registry. https://www.npmjs.com/package/@newjersey/feedback-widget
+1. Go the the [Draft Release action](https://github.com/newjersey/feedback-widget/actions/workflows/draft-release.yml), click "Run workflow" (you need write permissions to do this). Choose the branch (`main`) and the semver level of the new version (patch, minor, major).
+2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the [Releases page](https://github.com/newjersey/feedback-widget/releases).
+3. Click to Edit the new release, and update the description if needed. Click "Publish." This will trigger the publish-release Github Actions workflow.
+4. Once the workflow is completed, confirm that the package is updated on [NPM registry](https://www.npmjs.com/package/@newjersey/feedback-widget).

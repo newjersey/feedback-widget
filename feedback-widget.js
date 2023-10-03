@@ -127,10 +127,13 @@ class NJFeedbackWidget extends window.HTMLElement {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data.message === "Success" && data.feedbackId != null) {
+          if (this.feedbackId == null) {
+            this.feedbackId = data.feedbackId;
+          }
+          if (data.message === "Success" && this.feedbackId != null) {
             this.hideElement("#commentPrompt");
             this.showElement("#emailPrompt");
-          } else if (data.message.startsWith("Error")) {
+          } else {
             this.showElement("#commentSubmitError");
           }
         })
@@ -168,7 +171,7 @@ class NJFeedbackWidget extends window.HTMLElement {
           if (data.message === "Success" && data.feedbackId != null) {
             this.hideElement("#emailPrompt");
             this.showElement("#emailConfirmation", "flex");
-          } else if (data.message.startsWith("Error")) {
+          } else {
             this.showElement("#emailSubmitError");
           }
         })
@@ -215,7 +218,7 @@ class NJFeedbackWidget extends window.HTMLElement {
           if (data.message === "Success" && data.feedbackId != null) {
             this.feedbackId = data.feedbackId;
             logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
-          } else if (data.message.startsWith("Error")) {
+          } else {
             this.retryRating = true;
           }
         })
@@ -373,12 +376,12 @@ class NJFeedbackWidget extends window.HTMLElement {
       }
       
       .disclaimer-text {
-        margin-top: 1rem;
+        margin: 1rem 0;
       }
       
       .email-label {
         font-weight: 600;
-        margin-bottom: 0.5rem;
+        margin: 0.5rem 0;
       }
 
       .email-input {
