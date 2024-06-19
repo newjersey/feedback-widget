@@ -36,6 +36,7 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 
 - `contact-link` - Assign to a string with the URL that you want to direct users to if they have a specific question. By default, a the following URL will be used: https://nj.gov/nj/feedback.html.
 - `only-save-rating-to-analytics` - Rather than saving ratings without comments to the Google Sheets database, you can choose to only save to Google Analytics (whichever property is added to your site) with the value `"true"`. `"true"` is recommended if expecting high traffic. Defaults to `"false"`.
+- `show-comment-disclaimer` - This can be `"true"` or `"false"` to determine whether to display the disclaimer text underneath Step 2 of the form where we prompt users to submit an open-ended comment. The disclaimer directs users to a separate contact form link (see `contact-link` above) if they have specific questions. Defaults to `"true"` if not provided.
 
 ## For users: how to add this to your website
 
