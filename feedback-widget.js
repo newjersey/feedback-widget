@@ -244,6 +244,15 @@ class NJFeedbackWidget extends window.HTMLElement {
     const contactLink = this.hasAttribute("contact-link")
       ? this.getAttribute("contact-link")
       : "https://www.nj.gov/nj/feedback.html";
+
+    let showCommentDisclaimer = true;
+    if (
+      this.hasAttribute("show-comment-disclaimer") &&
+      this.getAttribute("show-comment-disclaimer") === "false"
+    ) {
+      showCommentDisclaimer = false;
+    }
+
     const html = /*html*/ `
     <div class="feedback-container">
       <div id="ratingPrompt" class="flex-box">
@@ -264,14 +273,18 @@ class NJFeedbackWidget extends window.HTMLElement {
               <label id="commentPromptText" for="comment" class="feedback-text"
                 >${content.commentPromptPositive}</label
               >
-              <p class="disclaimer-text">
-                ${content.commentPromptDisclaimer}<a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="${contactLink}"
-                  >${content.commentPromptDisclaimerLink}</a
-                >.
-              </p>
+              ${
+                showCommentDisclaimer
+                  ? `<p class="disclaimer-text">
+                      ${content.commentPromptDisclaimer}<a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="${contactLink}"
+                      >${content.commentPromptDisclaimerLink}</a
+                      >.
+                    </p>`
+                  : ""
+              }
             </div>
             <div>
               <textarea
@@ -303,7 +316,9 @@ class NJFeedbackWidget extends window.HTMLElement {
               <p class="disclaimer-text">${content.emailPrompt}</p>
             </div>
             <div>
-              <label for="email" class="email-label">${content.emailLabel}</label>
+              <label for="email" class="email-label">${
+                content.emailLabel
+              }</label>
               <input
                 type="email"
                 id="email"
