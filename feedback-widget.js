@@ -132,7 +132,11 @@ class NJFeedbackWidget extends window.HTMLElement {
           }
           if (data.message === "Success" && this.feedbackId != null) {
             this.hideElement("#commentPrompt");
-            this.showElement("#emailPrompt");
+            if (this.getAttribute("skip-email-step") === "true") {
+              this.showElement("#confirmation", "flex");
+            } else {
+              this.showElement("#emailPrompt");
+            }
           } else {
             this.showElement("#commentSubmitError");
           }
@@ -170,7 +174,7 @@ class NJFeedbackWidget extends window.HTMLElement {
         .then((data) => {
           if (data.message === "Success" && data.feedbackId != null) {
             this.hideElement("#emailPrompt");
-            this.showElement("#emailConfirmation", "flex");
+            this.showElement("#confirmation", "flex");
           } else {
             this.showElement("#emailSubmitError");
           }
@@ -194,11 +198,8 @@ class NJFeedbackWidget extends window.HTMLElement {
     this.hideElement("#ratingPrompt");
     this.showElement("#commentPrompt");
 
-    let onlySaveRatingToAnalytics = false;
-    if (this.hasAttribute("only-save-rating-to-analytics")) {
-      onlySaveRatingToAnalytics =
-        this.getAttribute("only-save-rating-to-analytics") === "true";
-    }
+    const onlySaveRatingToAnalytics =
+      this.getAttribute("only-save-rating-to-analytics") === "true";
 
     if (onlySaveRatingToAnalytics) {
       logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
@@ -241,17 +242,11 @@ class NJFeedbackWidget extends window.HTMLElement {
 
   getHTML() {
     const content = LANG_TO_CONTENT[this.language];
-    const contactLink = this.hasAttribute("contact-link")
-      ? this.getAttribute("contact-link")
-      : "https://www.nj.gov/nj/feedback.html";
-
-    let showCommentDisclaimer = true;
-    if (
-      this.hasAttribute("show-comment-disclaimer") &&
-      this.getAttribute("show-comment-disclaimer") === "false"
-    ) {
-      showCommentDisclaimer = false;
-    }
+    const contactLink =
+      this.getAttribute("contact-link") ||
+      "https://www.nj.gov/nj/feedback.html";
+    const showCommentDisclaimer =
+      this.getAttribute("show-comment-disclaimer") !== "false";
 
     const html = /*html*/ `
     <div class="feedback-container">
@@ -314,38 +309,42 @@ class NJFeedbackWidget extends window.HTMLElement {
             <div>
               <div class="feedback-text">${content.commentConfirmation}</div>
               <p class="disclaimer-text">${content.emailPrompt}</p>
-            </div>
-            <div>
-              <label for="email" class="email-label">${
-                content.emailLabel
-              }</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                class="feedback-input email-input"
-                required
-              />
-              <div id="emailSubmitError" class="error-text">
-                ${content.errorMessage}
               </div>
-              <button
-                id="emailSubmit"
-                class="feedback-button float-right submit-button"
-                type="submit"
-              >
-                ${content.emailSubmit}
-              </button>
+              <div>
+                <label for="email" class="email-label">${
+                  content.emailLabel
+                }</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="feedback-input email-input"
+                  required
+                />
+                <div id="emailSubmitError" class="error-text">
+                  ${content.errorMessage}
+                </div>
+                <button
+                  id="emailSubmit"
+                  class="feedback-button float-right submit-button"
+                  type="submit"
+                >
+                  ${content.emailSubmit}
+                </button>
             </div>
           </div>
         </form>
       </div>
-      <div id="emailConfirmation" class="email-confirmation">
+      <div id="confirmation" class="confirmation">
         <img
           src="https://beta.nj.gov/files/feedback-widget/check_icon.svg"
           alt=""
         />
-        <div class="email-confirmation-text">${content.emailConfirmation}</div>
+        <div class="confirmation-text">${
+          this.getAttribute("skip-email-step") === "true"
+            ? content.commentConfirmation
+            : content.emailConfirmation
+        }</div>
       </div>
     </div>
     `;
@@ -413,12 +412,12 @@ class NJFeedbackWidget extends window.HTMLElement {
         margin-top: 0.75rem;
       }
 
-      .email-confirmation {
+      .confirmation {
         display: flex;
         align-items: center;
       }
 
-      .email-confirmation-text {
+      .confirmation-text {
         font-weight: 600;
         font-size: 22px;
         margin-left: 1rem;
@@ -489,7 +488,7 @@ class NJFeedbackWidget extends window.HTMLElement {
       #emailFormSubmitted,
       #commentSubmitError,
       #emailSubmitError,
-      #emailConfirmation {
+      #confirmation {
         display: none;
       }
     `;
