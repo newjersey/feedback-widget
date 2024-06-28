@@ -4,6 +4,11 @@ function logGoogleEvent(action, label = undefined) {
       event_category: "Page feedback",
       event_label: label,
     });
+  } else if (window.dataLayer != null) {
+    window.dataLayer.push({
+      event: "click_feedback_rating",
+      object_type: label,
+    });
   }
 }
 
