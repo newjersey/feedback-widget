@@ -47,18 +47,18 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 | `show-comment-disclaimer` | A boolean that can be used to determine whether disclaimer text should be displayed in the feedback widget when users are prompted to submit a comment. This disclaimer will direct users to a separate contact form link if they have specific questions. | `"true"` or `"false"` | `"true"` | N/A | N/A
 | `skip-email-step` | A boolean that can be used to determine whether to prompt the user to enter their email to join a testing group after submitting a comment. | `"true"` or `"false"` | `"false"` | N/A | N/A
 
-## For users: how to add this to your website
+## How to add this to your website
 
 ### With Node/NPM
 
-1. Install the latest version via the command `npm i @newjersey/feedback-widget --save`.
-2. In the file you want to refer to the widget (for example, `App.tsx`/`App.jsx` in Create React App), import the JavaScript file to be used.
+1. Install the latest version of the widget via the command `npm i @newjersey/feedback-widget --save`.
+2. In the file where you would like to add a reference to the widget (likely `App.tsx`/`App.jsx` in a Create React App project), import the Javascript file to be used:
 
 ```javascript
 import "@newjersey/feedback-widget/feedback-widget.min.js";
 ```
 
-3. If using TypeScript, add the following type definition to the same file that you imported
+3. If using TypeScript, add the following type definition to the same file you imported
 
 ```typescript
 declare global {
@@ -100,11 +100,11 @@ declare global {
 ></feedback-widget>
 ```
 
-## For developers: how to improve this component
+## [FOR DEVELOPERS] How to improve this component
 
 ### Minifying the JS file
 
-Before pushing changes to `feedback-widget.js`, make sure you update the minified file (this will be automated eventually).
+Before pushing changes to `feedback-widget.js`, make sure you update the minified file:
 
 1. `npm install uglify-js -g` (global install, not part of npm project)
 2. `cd feedback-widget && nvm use 16`
