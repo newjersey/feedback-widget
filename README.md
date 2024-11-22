@@ -16,11 +16,11 @@ A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web
     **Note:** See `contact-link` attribute below for customization.
 3. **[OPTIONAL]** _Email_: Widget asks user to optionally share their email to join a user testing group. Upon submitting, this email is recorded to Google Sheets.
 
-| User Submission Type | Optional? | Saved to Google Analytics? | Saved to Google Sheets?
+| User Submission Type | Required? | Saved to Google Analytics? | Saved to Google Sheets?
 | ------- | ------- | ------- | ------ |
-| **Rating** | No | Yes | Yes, customizable | 
-| **Comment** | Yes | No | Yes | 
-| **Email** | Yes | No | Yes |
+| **Rating** | Yes | Yes | Yes, customizable | 
+| **Comment** | No | No | Yes | 
+| **Email** | No | No | Yes |
 
 ### Spanish content
 
@@ -38,21 +38,14 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 });
 ```
 
-### Where it's used
-
-- NJ DOL, TDI/FLI, MyLeaveBenefits, [Maternity Timeline Tool (Welcome)](https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-welcome.shtml)
-- NJ DOL, TDI/FLI, MyLeaveBenefits, [Maternity Timeline Tool (Tool)](https://nj.gov/labor/myleavebenefits/worker/maternity/timeline-tool.shtml)
-- NJ DOL, TDI/FLI, MyLeaveBenefits, [What happens after I apply?](https://nj.gov/labor/myleavebenefits/worker/resources/claims-status.shtml)
-- NJ DOL, TDI/FLI, MyLeaveBenefits, [Announcing a new way to log in](https://www.nj.gov/labor/myleavebenefits/worker/resources/login-update.shtml)
-- NJ DOL, UI, [Claim Status](https://uistatus.dol.state.nj.us/)
-- Office of Innovation, [Office website](https://innovation.nj.gov/)
-
 ### Customizable attributes
 
-- `contact-link` - Assign to a string with the URL that you want to direct users to if they have a specific question. By default, the following URL will be used: https://nj.gov/nj/feedback.html.
-- `only-save-rating-to-analytics` - Rather than saving ratings without comments to the Google Sheets database, you can choose to only save to Google Analytics (whichever property is added to your site) with the value `"true"`. `"true"` is recommended if expecting high traffic. Defaults to `"false"`.
-- `show-comment-disclaimer` - This can be `"true"` or `"false"` to determine whether to display the disclaimer text underneath Step 2 of the form where we prompt users to submit an open-ended comment. The disclaimer directs users to a separate contact form link (see `contact-link` above) if they have specific questions. Defaults to `"true"` if not provided.
-- `skip-email-step` - This can be `"true"` or `"false"` to determine whether to prompt the user to enter their email to join a testing group after submitting a comment. If `"false"`, submitting the comment will take the user straight to a thank you confirmation view. Defaults to `"false"` if not provided.
+| Attribute | Description | Possible values | Defaults to | Example | Recommendations
+| --------- | ----------- | --------------- | ----------- | ------- | ---------------
+| `contact-link` | A string that can be used to set a custom URL that users are directed to if they have a specific question that they would like to have addressed. | Any URL | [NJ Contact Us page URL](https://nj.gov/nj/feedback.html) | [innovation homepage repo](https://github.com/newjersey/innovation.nj.gov/blob/de88f1e11f5b0260cd0a74125876ab127a4164f3/_includes/footer.html#L8) | N/A | 
+| `only-save-rating-to-analytics` | A boolean that can be used to save ratings without comments only to Google Analytics rather than saving to the Google Sheets database | `"true"` or `"false"` | `"false"` | [UI Claim Status web app repo](https://github.com/newjersey/dol-ui-claim-status-web-app/blob/d293ff3df8bcc3c6c03bfb2aac4976787012d6b7/src/NJFooter.tsx#L42) | Setting to `"true"` is recommended for high traffic pages
+| `show-comment-disclaimer` | A boolean that can be used to determine whether disclaimer text should be displayed in the feedback widget when users are prompted to submit a comment. This disclaimer will direct users to a separate contact form link if they have specific questions. | `"true"` or `"false"` | `"true"` | N/A | N/A
+| `skip-email-step` | A boolean that can be used to determine whether to prompt the user to enter their email to join a testing group after submitting a comment. | `"true"` or `"false"` | `"false"` | N/A | N/A
 
 ## For users: how to add this to your website
 
