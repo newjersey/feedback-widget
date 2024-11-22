@@ -6,15 +6,29 @@ A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web
 
 ### User flow
 
-1. _Rating_: At the bottom of a webpage, the widget asks user to rate their experience of the page with "Yes" and "No" buttons. Upon clicking an option, the rating is saved to a Google Sheet and Google Analytics (page URL, datetime, and selection). Note: See `only-save-rating-to-analytics` attribute below for customization.
-2. _Comment_: Widget asks user to optionally share feedback in a free text field. Upon submitting, this text is recorded to Google Sheets. Note: Users often have specific questions about their situation rather than feedback. Note: See `contact-link` attribute below for customization.
-3. _Email_: Widget asks user to optionally share their email to join a user testing group. Upon submitting, this email is recorded to Google Sheets.
+1. _Rating_: At the bottom of a webpage, the widget asks user to rate their experience of the page with "Yes" and "No" buttons. Upon clicking an option, the rating is saved to a Google Sheet and Google Analytics (along with page URL, and submission datetime).
+
+    **Note:** See `only-save-rating-to-analytics` attribute below for customization.
+2. **[OPTIONAL]** _Comment_: Widget asks user to optionally share feedback in a free text field. Upon submitting, this text is recorded to Google Sheets.
+
+    **Note:** Users often have specific questions about their situation rather than feedback.
+    
+    **Note:** See `contact-link` attribute below for customization.
+3. **[OPTIONAL]** _Email_: Widget asks user to optionally share their email to join a user testing group. Upon submitting, this email is recorded to Google Sheets.
+
+| User Submission Type | Optional? | Saved to Google Analytics? | Saved to Google Sheets?
+| ------- | ------- | ------- | ------ |
+| **Rating** | No | Yes | Yes, customizable | 
+| **Comment** | Yes | No | Yes | 
+| **Email** | Yes | No | Yes |
 
 ### Spanish content
 
-The component supports English and Spanish content and switching between the two. To switch the language of the component's content, use JavaScript to send a custom event using the code below. For example, we can send this event in a click handler for a button.
+The component supports both English and Spanish content and offers users the ability to toggle between the two. To switch the language used within the component, use JavaScript to send a custom event using the code below:
 
 ```javascript
+// sending a custom changeLanguage event in a click handler for a language toggle button
+
 document.getElementById("languageButton").addEventListener("click", (e) => {
   const customEvent = new CustomEvent("changeLanguage", {
     detail: "es" /* "en" for English or "es" for Spanish */,
@@ -35,7 +49,7 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 
 ### Customizable attributes
 
-- `contact-link` - Assign to a string with the URL that you want to direct users to if they have a specific question. By default, a the following URL will be used: https://nj.gov/nj/feedback.html.
+- `contact-link` - Assign to a string with the URL that you want to direct users to if they have a specific question. By default, the following URL will be used: https://nj.gov/nj/feedback.html.
 - `only-save-rating-to-analytics` - Rather than saving ratings without comments to the Google Sheets database, you can choose to only save to Google Analytics (whichever property is added to your site) with the value `"true"`. `"true"` is recommended if expecting high traffic. Defaults to `"false"`.
 - `show-comment-disclaimer` - This can be `"true"` or `"false"` to determine whether to display the disclaimer text underneath Step 2 of the form where we prompt users to submit an open-ended comment. The disclaimer directs users to a separate contact form link (see `contact-link` above) if they have specific questions. Defaults to `"true"` if not provided.
 - `skip-email-step` - This can be `"true"` or `"false"` to determine whether to prompt the user to enter their email to join a testing group after submitting a comment. If `"false"`, submitting the comment will take the user straight to a thank you confirmation view. Defaults to `"false"` if not provided.
