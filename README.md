@@ -1,5 +1,12 @@
 # New Jersey Feedback Widget
 
+## Further Documentation
+Additional documentation related to using the feedback widget and data collected.
+
+- [Getting Started with the Feedback Widget](https://docs.google.com/document/d/1gg-u9hEfCQ9-o014gAOonLX8whqPZuQDxxMrTQyp_BI/edit?tab=t.0)
+- [Analyzing Feedback Widget data with Looker Studio](https://docs.google.com/document/d/1m4NMp7ul72jd7Xs5e0hnK-yTVs5DS9NzypkM5CVpai8/edit?tab=t.0#heading=h.7d0k4lo2ipwb)
+- [Analyzing Feedback Widget data with the AI Assistant](https://docs.google.com/document/d/1w1ZJcs0oG4RGYne1Ksm1PfvfVpeoIUJhUhrtQi1XKD0/edit?tab=t.0#heading=h.gg2y1ft2ehff)
+
 ## About this component
 
 A generic, reusable [web component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) that can be added to any New Jersey page to get quick, in-page feedback from the user. This is inspired by the [CA Design System's similar component](https://designsystem.webstandards.ca.gov/components/page-feedback/readme/). It is mobile-responsive, accessible (tested with [axe](https://www.deque.com/axe/) tool), and supports English and Spanish language. See the [Feedback API](https://github.com/newjersey/feedback-api) Github repository for the code that handles and saves this data.
