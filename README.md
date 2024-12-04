@@ -3,7 +3,7 @@
 ## Further Documentation
 Additional documentation related to using the feedback widget and data collected.
 
-- [Getting Started with the Feedback Widget](https://docs.google.com/document/d/1gg-u9hEfCQ9-o014gAOonLX8whqPZuQDxxMrTQyp_BI/edit?tab=t.0)
+- [Getting Started with the Feedback Widget](https://docs.google.com/document/d/1wd6kyIyF7oIsaoKX_KrGdpyimSfCa5ll-P2veb_tyrw/edit?usp=sharing)
 - [Analyzing Feedback Widget data with Looker Studio](https://docs.google.com/document/d/1m4NMp7ul72jd7Xs5e0hnK-yTVs5DS9NzypkM5CVpai8/edit?tab=t.0#heading=h.7d0k4lo2ipwb)
 - [Analyzing Feedback Widget data with the AI Assistant](https://docs.google.com/document/d/1w1ZJcs0oG4RGYne1Ksm1PfvfVpeoIUJhUhrtQi1XKD0/edit?tab=t.0#heading=h.gg2y1ft2ehff)
 
