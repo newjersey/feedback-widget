@@ -85,11 +85,19 @@ declare global {
 
 ### For website without NPM
 
-1. Load the JS file from a CDN link by adding a script tag to your HTML. You can change the version number after the @ sign to match your desired release (https://github.com/newjersey/feedback-widget/releases).
-
+1. Load the JS file from a CDN link by adding a script tag to your HTML. 
 ```javascript
 <script
-  src="https://unpkg.com/@newjersey/feedback-widget@0.2.0/feedback-widget.min.js"
+  src="https://unpkg.com/@newjersey/feedback-widget@{version}/feedback-widget.min.js"
+  defer
+></script>
+```
+
+You can change the version number after the @ sign to match your desired release (https://github.com/newjersey/feedback-widget/releases).
+For example, as of 07/01/2025, the latest version is 0.6.0 so you would use the following script tag: 
+```javascript
+<script
+  src="https://unpkg.com/@newjersey/feedback-widget@0.6.0/feedback-widget.min.js"
   defer
 ></script>
 ```
