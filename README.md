@@ -110,6 +110,13 @@ For example, as of 07/01/2025, the latest version is 0.6.0 so you would use the 
 ></feedback-widget>
 ```
 
+## Troubleshooting
+
+### Don't place the feedback widget within a `<form>` element
+The feedback widget itself contains `<form>` elements, and [nesting `<form>` elements is invalid HTML](https://stackoverflow.com/questions/26536861/are-nested-forms-valid-in-html5). 
+
+Unexpected behavior can occur when the browser attempts to parse and render the invalid HTML, such as stripping `<form>` tags out, which can break the component's functionality.
+
 ## [FOR DEVELOPERS] How to improve this component
 
 ### Minifying the JS file
