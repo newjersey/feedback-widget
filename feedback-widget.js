@@ -108,12 +108,17 @@ class NJFeedbackWidget extends window.HTMLElement {
     });
 
     const commentForm = this.querySelector("#commentForm");
+    const commentButton = document.getElementById("commentSubmit");
+    commentButton.addEventListener("click", (e) => {
+      if (commentButton.getAttribute("aria-disabled") === "true") {
+        e.preventDefault();
+      }
+    });
+
     commentForm.addEventListener("submit", (e) => {
       e.preventDefault();
-
-      const submitButton = document.getElementById("commentSubmit");
-      submitButton.disabled = true;
-      submitButton.textContent =
+      commentButton.setAttribute("aria-disabled", "true");
+      commentButton.textContent =
         LANG_TO_CONTENT[this.language].commentSubmitLoading;
       this.hideElement("#commentSubmitError");
 
@@ -150,19 +155,24 @@ class NJFeedbackWidget extends window.HTMLElement {
           this.showElement("#commentSubmitError");
         })
         .finally(() => {
-          submitButton.disabled = false;
-          submitButton.textContent =
+          commentButton.removeAttribute("aria-disabled");
+          commentButton.textContent =
             LANG_TO_CONTENT[this.language].commentSubmit;
         });
     });
 
     const emailForm = this.querySelector("#emailForm");
+    const emailButton = document.getElementById("emailSubmit");
+    emailButton.addEventListener("click", (e) => {
+      if (emailButton.getAttribute("aria-disabled") === "true") {
+        e.preventDefault();
+      }
+    });
     emailForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const submitButton = document.getElementById("emailSubmit");
-      submitButton.disabled = true;
-      submitButton.textContent =
+      emailButton.setAttribute("aria-disabled", "true");
+      emailButton.textContent =
         LANG_TO_CONTENT[this.language].emailSubmitLoading;
       this.hideElement("#emailSubmitError");
 
@@ -188,13 +198,15 @@ class NJFeedbackWidget extends window.HTMLElement {
           this.showElement("#emailSubmitError");
         })
         .finally(() => {
-          submitButton.disabled = false;
-          submitButton.textContent = LANG_TO_CONTENT[this.language].emailSubmit;
+          emailButton.removeAttribute("aria-disabled");
+          emailButton.textContent = LANG_TO_CONTENT[this.language].emailSubmit;
         });
     });
   }
 
   handleRating(rating) {
+    const commentButton = document.getElementById("commentSubmit");
+
     this.rating = rating;
     if (!rating) {
       this.querySelector("#commentPromptText").innerText =
@@ -209,7 +221,9 @@ class NJFeedbackWidget extends window.HTMLElement {
     if (onlySaveRatingToAnalytics) {
       logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
     } else {
-      document.getElementById("commentSubmit").disabled = true;
+      document
+        .getElementById("commentSubmit")
+        .setAttribute("aria-disabled", "true");
       const postData = {
         pageURL: window.location.href,
         rating,
@@ -232,7 +246,7 @@ class NJFeedbackWidget extends window.HTMLElement {
           this.retryRating = true;
         })
         .finally(() => {
-          document.getElementById("commentSubmit").disabled = false;
+          commentButton.removeAttribute("aria-disabled");
         });
     }
   }
@@ -460,9 +474,13 @@ class NJFeedbackWidget extends window.HTMLElement {
         color: #ffffff !important;
         text-decoration: none;
       }
-      
-      .feedback-button:disabled {
+
+      .feedback-button[aria-disabled="true"] {
         opacity: 0.65;
+        border-color: #3d4551;
+        background-color: #3d4551;
+        color: #ffffff !important;
+        text-decoration: none;
       }
       
       @media screen and (max-width: 450px) {
