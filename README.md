@@ -102,7 +102,7 @@ For example, as of 07/01/2025, the latest version is 0.6.0 so you would use the 
 ></script>
 ```
 
-2. Render the feedback widget by adding the following tag in your HTML (likely at the bottom of the page). It's just like using any other HTML tag.
+2. Render the feedback widget by adding the following tag in your HTML (likely at the bottom of the page). It's like using any other HTML tag.
 
 ```html
 <feedback-widget
@@ -113,19 +113,24 @@ For example, as of 07/01/2025, the latest version is 0.6.0 so you would use the 
 ## Troubleshooting
 
 ### Don't place the feedback widget within a `<form>` element
-The feedback widget itself contains `<form>` elements, and [nesting `<form>` elements is invalid HTML](https://stackoverflow.com/questions/26536861/are-nested-forms-valid-in-html5). 
+The feedback widget itself contains `<form>` elements, and [nesting `<form>` elements is not valid HTML](https://stackoverflow.com/questions/26536861/are-nested-forms-valid-in-html5). 
 
-Unexpected behavior can occur when the browser attempts to parse and render the invalid HTML, such as stripping `<form>` tags out, which can break the component's functionality.
+Unexpected behavior can occur when the browser attempts to parse and render HTML that is not valid, such as stripping `<form>` tags out, which can break the component's functionality.
 
 ## [FOR DEVELOPERS] How to improve this component
 
 ### Minifying the JS file
 
-Before pushing changes to `feedback-widget.js`, make sure you update the minified file:
+Whenever there is a change to `feedback-widget.js`, update the minified file before committing and pushing:
 
 1. `npm install uglify-js -g` (global install, not part of npm project)
-2. `cd feedback-widget && nvm use 16`
+2. `cd feedback-widget && nvm use 18` 
+   - NOTE: No need to `cd` if you're already in `feedback-widget`; check the `.nvmrc` for the latest Node version
 3. `uglifyjs feedback-widget.js -c -o feedback-widget.min.js`
+
+### Testing your updates
+
+Steps to test your updates on a site that embeds the feedback widget can be found in [Feedback Widget Testing via DevTools](https://docs.google.com/document/d/1QYVS7VryECW87C5CqLyZQF_wbnHPxZcZ9ThHLzgxLW8/edit?tab=t.0#heading=h.xklo0mrls5cd).
 
 ### Publishing a new version of the package
 

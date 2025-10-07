@@ -118,9 +118,9 @@ class NJFeedbackWidget extends window.HTMLElement {
     commentForm.addEventListener("submit", (e) => {
       e.preventDefault();
       commentButton.setAttribute("aria-disabled", "true");
-      commentButton.textContent =
-        LANG_TO_CONTENT[this.language].commentSubmitLoading;
-      this.hideElement("#commentSubmitError");
+
+      this.hideElement("#commentSubmitText");
+      this.showElement("#commentSubmitLoadingText");
 
       const comment = e.target.elements.comment.value;
       const postData =
@@ -155,9 +155,9 @@ class NJFeedbackWidget extends window.HTMLElement {
           this.showElement("#commentSubmitError");
         })
         .finally(() => {
+          this.hideElement("#commentSubmitLoadingText");
+          this.showElement("#commentSubmitText");
           commentButton.removeAttribute("aria-disabled");
-          commentButton.textContent =
-            LANG_TO_CONTENT[this.language].commentSubmit;
         });
     });
 
@@ -172,9 +172,9 @@ class NJFeedbackWidget extends window.HTMLElement {
       e.preventDefault();
 
       emailButton.setAttribute("aria-disabled", "true");
-      emailButton.textContent =
-        LANG_TO_CONTENT[this.language].emailSubmitLoading;
-      this.hideElement("#emailSubmitError");
+
+      this.hideElement("#emailSubmitText");
+      this.showElement("#emailSubmitLoadingText");
 
       const postData = {
         feedbackId: this.feedbackId,
@@ -198,8 +198,9 @@ class NJFeedbackWidget extends window.HTMLElement {
           this.showElement("#emailSubmitError");
         })
         .finally(() => {
+          this.hideElement("#emailSubmitLoadingText");
+          this.showElement("#emailSubmitText");
           emailButton.removeAttribute("aria-disabled");
-          emailButton.textContent = LANG_TO_CONTENT[this.language].emailSubmit;
         });
     });
   }
@@ -208,10 +209,14 @@ class NJFeedbackWidget extends window.HTMLElement {
     const commentButton = document.getElementById("commentSubmit");
 
     this.rating = rating;
-    if (!rating) {
-      this.querySelector("#commentPromptText").innerText =
-        LANG_TO_CONTENT[this.language].commentPromptNegative;
+    if (rating) {
+      this.hideElement("#commentPromptTextNeg");
+      this.showElement("#commentPromptTextPos");
+    } else {
+      this.hideElement("#commentPromptTextPos");
+      this.showElement("#commentPromptTextNeg");
     }
+
     this.hideElement("#ratingPrompt");
     this.showElement("#commentPrompt");
 
@@ -221,9 +226,7 @@ class NJFeedbackWidget extends window.HTMLElement {
     if (onlySaveRatingToAnalytics) {
       logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
     } else {
-      document
-        .getElementById("commentSubmit")
-        .setAttribute("aria-disabled", "true");
+      commentButton.setAttribute("aria-disabled", "true");
       const postData = {
         pageURL: window.location.href,
         rating,
@@ -281,11 +284,14 @@ class NJFeedbackWidget extends window.HTMLElement {
         </div>
       </div>
       <div id="commentPrompt">
-        <form id="commentForm">
+        <form id="commentForm" data-testid="commentForm">
           <div class="grid-box">
             <div>
-              <label id="commentPromptText" for="comment" class="feedback-text"
+              <label id="commentPromptTextPos" for="comment" class="feedback-text"
                 >${content.commentPromptPositive}</label
+              >
+              <label id="commentPromptTextNeg" for="comment" class="feedback-text"
+                >${content.commentPromptNegative}</label
               >
               ${
                 showCommentDisclaimer
@@ -314,16 +320,18 @@ class NJFeedbackWidget extends window.HTMLElement {
               <button
                 id="commentSubmit"
                 class="feedback-button float-right submit-button"
-                type="submit"
-              >
-                ${content.commentSubmit}
-              </button>
+                type="submit">
+                 <span id="commentSubmitText">${content.commentSubmit}</span>
+                 <span id="commentSubmitLoadingText" style="display:none">${
+                   content.commentSubmitLoading
+                 }</span>  
+            </button>
             </div>
           </div>
         </form>
       </div>
       <div id="emailPrompt">
-        <form id="emailForm">
+        <form id="emailForm" data-testid="emailForm">
           <div class="grid-box">
             <div>
               <div class="feedback-text">${content.commentConfirmation}</div>
@@ -348,8 +356,11 @@ class NJFeedbackWidget extends window.HTMLElement {
                   class="feedback-button float-right submit-button"
                   type="submit"
                 >
-                  ${content.emailSubmit}
-                </button>
+                  <span id="emailSubmitText">${content.emailSubmit}</span>
+                  <span id="emailSubmitLoadingText" style="display:none">${
+                    content.emailSubmitLoading
+                  }</span>
+               </button>
             </div>
           </div>
         </form>
@@ -520,3 +531,6 @@ class NJFeedbackWidget extends window.HTMLElement {
 }
 
 window.customElements.define("feedback-widget", NJFeedbackWidget);
+if (typeof module !== "undefined") {
+  module.exports = { NJFeedbackWidget, LANG_TO_CONTENT };
+}
