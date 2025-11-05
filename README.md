@@ -117,6 +117,16 @@ The feedback widget itself contains `<form>` elements, and [nesting `<form>` ele
 
 Unexpected behavior can occur when the browser attempts to parse and render HTML that is not valid, such as stripping `<form>` tags out, which can break the component's functionality.
 
+### Ensure your site's CSP allows feedback widget functionality
+
+If your site has a [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) (CSP), the following must be true for the feedback widget to function:
+
+1. The site permits fetch requests to the Feedback API URL (`https://innovation.nj.gov/app/feedback/dev`).
+    - Example: add `"https://innovation.nj.gov"` or `"https://*.nj.gov"` to the `connect-src` directive of the CSP.
+2. If you're loading the widget from the UNPKG CDN (i.e. for sites without NPM), ensure UNPKG is a valid source in `<script>` elements.
+    - Example: add `"https://unpkg.com"` to the `script-src` or `script-src-elem` directive of the CSP.
+
+
 ## [FOR DEVELOPERS] How to improve this component
 
 ### Minifying the JS file
