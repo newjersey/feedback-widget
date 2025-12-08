@@ -148,6 +148,11 @@ Steps to test your updates on a site that embeds the feedback widget can be foun
 2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the [Releases page](https://github.com/newjersey/feedback-widget/releases).
 3. Click to Edit the new release, and update the description if needed. Click "Publish." This will trigger the publish-release Github Actions workflow.
 4. Once the workflow is completed, confirm that the package is updated on [NPM registry](https://www.npmjs.com/package/@newjersey/feedback-widget).
+5. Under [**For website without NPM**](https://github.com/newjersey/feedback-widget/tree/refs/heads/main?tab=readme-ov-file#for-website-without-npm), update the current version and as of date in the example sentence:
+```
+For example, as of mm/dd/yyyy, the latest version is x.x.x, so you would use the following script tag:
+```
+6.  Remember to update the version in the script tag itself.
 
 ## Additional documentation (internal only)
 
