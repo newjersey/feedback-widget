@@ -49,6 +49,10 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 | `show-comment-disclaimer`       | A boolean that can be used to determine whether disclaimer text should be displayed in the feedback widget when users are prompted to submit a comment. This disclaimer will direct users to a separate contact form link if they have specific questions. | `"true"` or `"false"` | `"true"`                                                  | N/A                                                                                                                                                         | N/A                                                       |
 | `skip-email-step`               | A boolean that can be used to determine whether to prompt the user to enter their email to join a testing group after submitting a comment.                                                                                                                | `"true"` or `"false"` | `"false"`                                                 | N/A                                                                                                                                                         | N/A                                                       |
 
+### Backend
+
+This frontend component is meant for use on New Jersey pages, and is hardcoded to sent feedback to a running instance of the [Feedback Widget API](https://github.com/newjersey/feedback-api/) hosted by the Platform Team. To access the feedback collected by the frontend widget for, please contact the Platform Team.
+
 ## How to add this to your website
 
 ### With Node/NPM
@@ -60,7 +64,7 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 import "@newjersey/feedback-widget/feedback-widget.min.js";
 ```
 
-3. If using TypeScript, add the following type definition to the same file you imported
+3. If using TypeScript, add the following type definition to the file where you added the import
 
 ```typescript
 declare global {
