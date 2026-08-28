@@ -1,6 +1,6 @@
 const { NJFeedbackWidget, LANG_TO_CONTENT } = require("./feedback-widget.js");
 require("@testing-library/jest-dom");
-const { screen, fireEvent, getAllByRole } = require("@testing-library/dom");
+const { screen, fireEvent } = require("@testing-library/dom");
 const userEvent = require("@testing-library/user-event").default;
 
 beforeAll(() => {
@@ -53,7 +53,9 @@ describe("feedbackWidget", () => {
         screen.getByText(LANG_TO_CONTENT.en.commentPromptNegative)
       ).not.toBeVisible();
 
-      assertOnlyLabelOnCommentTextarea(LANG_TO_CONTENT.en.commentPromptPositive);
+      assertOnlyLabelOnCommentTextarea(
+        LANG_TO_CONTENT.en.commentPromptPositive
+      );
     });
 
     it("shows negative prompt text when 'No' is clicked", async () => {
@@ -69,7 +71,9 @@ describe("feedbackWidget", () => {
         screen.getByText(LANG_TO_CONTENT.en.commentPromptPositive)
       ).not.toBeVisible();
 
-      assertOnlyLabelOnCommentTextarea(LANG_TO_CONTENT.en.commentPromptNegative);
+      assertOnlyLabelOnCommentTextarea(
+        LANG_TO_CONTENT.en.commentPromptNegative
+      );
     });
   });
 

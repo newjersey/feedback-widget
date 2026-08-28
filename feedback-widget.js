@@ -151,7 +151,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.showElement("#commentSubmitError");
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.showElement("#commentSubmitError");
         })
         .finally(() => {
@@ -194,7 +194,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.showElement("#emailSubmitError");
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.showElement("#emailSubmitError");
         })
         .finally(() => {
@@ -245,7 +245,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.retryRating = true;
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.retryRating = true;
         })
         .finally(() => {
@@ -334,9 +334,9 @@ class NJFeedbackWidget extends window.HTMLElement {
                 class="feedback-button float-right submit-button"
                 type="submit">
                  <span id="commentSubmitText">${content.commentSubmit}</span>
-                 <span id="commentSubmitLoadingText" style="display:none">${
-                   content.commentSubmitLoading
-                 }</span>  
+                 <span id="commentSubmitLoadingText" style="display:none">
+                  ${content.commentSubmitLoading}
+                 </span>  
             </button>
             </div>
           </div>
@@ -350,9 +350,7 @@ class NJFeedbackWidget extends window.HTMLElement {
               <p class="disclaimer-text">${content.emailPrompt}</p>
               </div>
               <div>
-                <label for="email" class="email-label">${
-                  content.emailLabel
-                }</label>
+                <label for="email" class="email-label">${content.emailLabel}</label>
                 <input
                   type="email"
                   id="email"
