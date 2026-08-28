@@ -21,8 +21,6 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-// Only one comment prompt label may be labelling the textarea at a time, or
-// WAVE flags a "multiple form labels" error even when the other is hidden.
 const assertOnlyLabelOnCommentTextarea = (activeLabel) => {
   const textarea = screen.getByLabelText(activeLabel);
   expect(textarea).toBeVisible();
