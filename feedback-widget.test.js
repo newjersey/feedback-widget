@@ -21,6 +21,14 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+// Only one comment prompt label may be labelling the textarea at a time, or
+// WAVE flags a "multiple form labels" error even when the other is hidden.
+const assertOnlyLabelOnCommentTextarea = (activeLabel) => {
+  const textarea = screen.getByLabelText(activeLabel);
+  expect(textarea).toBeVisible();
+  expect(textarea.labels).toHaveLength(1);
+};
+
 it("does not associate either comment prompt label with the textarea before a rating is chosen", () => {
   expect(
     screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
@@ -41,17 +49,11 @@ describe("feedbackWidget", () => {
       expect(
         screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)
       ).not.toBeVisible();
-
-      expect(
-        screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
-      ).toBeVisible();
-
       expect(
         screen.getByText(LANG_TO_CONTENT.en.commentPromptNegative)
       ).not.toBeVisible();
-      expect(
-        screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptNegative)
-      ).not.toBeInTheDocument();
+
+      assertOnlyLabelOnCommentTextarea(LANG_TO_CONTENT.en.commentPromptPositive);
     });
 
     it("shows negative prompt text when 'No' is clicked", async () => {
@@ -60,21 +62,14 @@ describe("feedbackWidget", () => {
       });
       await userEvent.click(noButton);
 
-
       expect(
         screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)
       ).not.toBeVisible();
-      
-      expect(
-        screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptNegative)
-      ).toBeVisible();
-      
       expect(
         screen.getByText(LANG_TO_CONTENT.en.commentPromptPositive)
       ).not.toBeVisible();
-      expect(
-        screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
-      ).not.toBeInTheDocument();
+
+      assertOnlyLabelOnCommentTextarea(LANG_TO_CONTENT.en.commentPromptNegative);
     });
   });
 
