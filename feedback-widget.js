@@ -210,11 +210,11 @@ class NJFeedbackWidget extends window.HTMLElement {
 
     this.rating = rating;
     if (rating) {
-      this.hideElement("#commentPromptTextNeg");
-      this.showElement("#commentPromptTextPos");
+      this.hideLabelElement("#commentPromptTextNeg");
+      this.showLabelElement("#commentPromptTextPos", "comment");
     } else {
-      this.hideElement("#commentPromptTextPos");
-      this.showElement("#commentPromptTextNeg");
+      this.hideLabelElement("#commentPromptTextPos");
+      this.showLabelElement("#commentPromptTextNeg", "comment");
     }
 
     this.hideElement("#ratingPrompt");
@@ -262,6 +262,18 @@ class NJFeedbackWidget extends window.HTMLElement {
     this.querySelector(selector).style.display = "none";
   }
 
+  // Only one label may point at a given form control at a time, or WAVE flags
+  // a "multiple form labels" error even when the others are visually hidden.
+  showLabelElement(selector, forId) {
+    this.showElement(selector);
+    this.querySelector(selector).setAttribute("for", forId);
+  }
+
+  hideLabelElement(selector) {
+    this.hideElement(selector);
+    this.querySelector(selector).removeAttribute("for");
+  }
+
   getHTML() {
     const content = LANG_TO_CONTENT[this.language];
     const contactLink =
@@ -287,10 +299,10 @@ class NJFeedbackWidget extends window.HTMLElement {
         <form id="commentForm" data-testid="commentForm">
           <div class="grid-box">
             <div>
-              <label id="commentPromptTextPos" for="comment" class="feedback-text"
+              <label id="commentPromptTextPos" class="feedback-text"
                 >${content.commentPromptPositive}</label
               >
-              <label id="commentPromptTextNeg" for="comment" class="feedback-text"
+              <label id="commentPromptTextNeg" class="feedback-text"
                 >${content.commentPromptNegative}</label
               >
               ${

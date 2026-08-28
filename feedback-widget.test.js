@@ -21,6 +21,15 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+it("does not associate either comment prompt label with the textarea before a rating is chosen", () => {
+  expect(
+    screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptNegative)
+  ).not.toBeInTheDocument();
+});
+
 describe("feedbackWidget", () => {
   describe("handleRating", () => {
     it("shows positive prompt text when 'Yes' is clicked", async () => {
@@ -30,14 +39,19 @@ describe("feedbackWidget", () => {
       await userEvent.click(yesButton);
 
       expect(
-        screen.queryByText(LANG_TO_CONTENT.en.commentPromptNegative)
+        screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)
       ).not.toBeVisible();
-      expect(
-        screen.queryByText(LANG_TO_CONTENT.en.ratingPrompt)
-      ).not.toBeVisible();
+
       expect(
         screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
       ).toBeVisible();
+
+      expect(
+        screen.getByText(LANG_TO_CONTENT.en.commentPromptNegative)
+      ).not.toBeVisible();
+      expect(
+        screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptNegative)
+      ).not.toBeInTheDocument();
     });
 
     it("shows negative prompt text when 'No' is clicked", async () => {
@@ -46,15 +60,21 @@ describe("feedbackWidget", () => {
       });
       await userEvent.click(noButton);
 
+
+      expect(
+        screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)
+      ).not.toBeVisible();
+      
       expect(
         screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptNegative)
       ).toBeVisible();
+      
       expect(
-        screen.queryByText(LANG_TO_CONTENT.en.commentPromptPositive)
+        screen.getByText(LANG_TO_CONTENT.en.commentPromptPositive)
       ).not.toBeVisible();
       expect(
-        screen.queryByText(LANG_TO_CONTENT.en.ratingNegative)
-      ).not.toBeVisible();
+        screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
+      ).not.toBeInTheDocument();
     });
   });
 
