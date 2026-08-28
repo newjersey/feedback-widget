@@ -299,12 +299,12 @@ class NJFeedbackWidget extends window.HTMLElement {
         <form id="commentForm" data-testid="commentForm">
           <div class="grid-box">
             <div>
-              <label id="commentPromptTextPos" class="feedback-text"
-                >${content.commentPromptPositive}</label
-              >
-              <label id="commentPromptTextNeg" class="feedback-text"
-                >${content.commentPromptNegative}</label
-              >
+              <label id="commentPromptTextPos" for="comment" class="feedback-text">
+               ${content.commentPromptPositive}
+              </label>
+              <label id="commentPromptTextNeg" class="feedback-text">
+                ${content.commentPromptNegative}
+              </label>
               ${
                 showCommentDisclaimer
                   ? `<p class="disclaimer-text">

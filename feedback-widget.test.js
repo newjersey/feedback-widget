@@ -27,13 +27,11 @@ const assertOnlyLabelOnCommentTextarea = (activeLabel) => {
   expect(textarea.labels).toHaveLength(1);
 };
 
-it("does not associate either comment prompt label with the textarea before a rating is chosen", () => {
-  expect(
-    screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
-  ).not.toBeInTheDocument();
-  expect(
-    screen.queryByLabelText(LANG_TO_CONTENT.en.commentPromptNegative)
-  ).not.toBeInTheDocument();
+it("only one comment prompt label is associated with the comment textarea before a rating is chosen", () => {
+  expect(screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)).toBeVisible();
+
+  const commentTextarea = screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptPositive);
+  expect(commentTextarea.labels).toHaveLength(1);
 });
 
 describe("feedbackWidget", () => {
