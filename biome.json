@@ -1,11 +1,27 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
+<<<<<<< HEAD
     "includes": ["**", "!package-lock.json", "!feedback-widget.min.js"]
   },
   "formatter": {
     "enabled": true,
     "lineWidth": 80,
+=======
+    "includes": [
+      "**",
+      "!**/.yarn/*",
+      "!package-lock.json",
+      "!pnpm-lock.yaml",
+      "!yarn.lock",
+      "!bun.lockb",
+      "!.claude"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "lineWidth": 100,
+>>>>>>> f25458d (Run biome and setup husky)
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf"
@@ -15,16 +31,25 @@
     "rules": {
       "preset": "recommended",
       "complexity": {
+<<<<<<< HEAD
         "noExcessiveCognitiveComplexity": "warn",
         "noExcessiveLinesPerFunction": {
           "level": "warn",
           "options": { "maxLines": 80 }
         },
+=======
+>>>>>>> f25458d (Run biome and setup husky)
         "noForEach": "error",
         "useArrowFunction": "error",
         "useMaxParams": {
           "level": "error",
+<<<<<<< HEAD
           "options": { "max": 2 }
+=======
+          "options": {
+            "max": 4
+          }
+>>>>>>> f25458d (Run biome and setup husky)
         }
       },
       "correctness": {
@@ -32,16 +57,43 @@
         "noUnusedVariables": "error"
       },
       "style": {
+<<<<<<< HEAD
         "noParameterAssign": "error",
         "useConst": "error",
+=======
+        "noCommonJs": "error",
+        "noParameterAssign": "error",
+        "useConst": "error",
+        "useExportType": "error",
+        "useImportType": "error",
+        "useNodejsImportProtocol": "error",
+>>>>>>> f25458d (Run biome and setup husky)
         "useTemplate": "error",
         "useThrowOnlyError": "error",
         "useErrorCause": "error"
       },
       "suspicious": {
+<<<<<<< HEAD
         "noConsole": "warn",
         "noVar": "error",
         "noNestedPromises": "error"
+=======
+        "noConsole": "error",
+        "noExplicitAny": "error",
+        "noImportCycles": "error",
+        "noVar": "error",
+        "noNestedPromises": "error"
+      },
+      "nursery": {
+        "noFloatingPromises": "error"
+      }
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+>>>>>>> f25458d (Run biome and setup husky)
       }
     }
   },
@@ -50,9 +102,19 @@
       "arrowParentheses": "always",
       "bracketSameLine": false,
       "bracketSpacing": true,
+<<<<<<< HEAD
       "quoteStyle": "double",
       "semicolons": "always",
       "trailingCommas": "es5"
     }
   }
 }
+=======
+      "jsxQuoteStyle": "double",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  }
+}
+>>>>>>> f25458d (Run biome and setup husky)
