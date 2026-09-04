@@ -151,7 +151,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.showElement("#commentSubmitError");
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.showElement("#commentSubmitError");
         })
         .finally(() => {
@@ -194,7 +194,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.showElement("#emailSubmitError");
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.showElement("#emailSubmitError");
         })
         .finally(() => {
@@ -210,11 +210,11 @@ class NJFeedbackWidget extends window.HTMLElement {
 
     this.rating = rating;
     if (rating) {
-      this.hideElement("#commentPromptTextNeg");
-      this.showElement("#commentPromptTextPos");
+      this.hideLabelElement("#commentPromptTextNeg");
+      this.showLabelElement("#commentPromptTextPos", "comment");
     } else {
-      this.hideElement("#commentPromptTextPos");
-      this.showElement("#commentPromptTextNeg");
+      this.hideLabelElement("#commentPromptTextPos");
+      this.showLabelElement("#commentPromptTextNeg", "comment");
     }
 
     this.hideElement("#ratingPrompt");
@@ -245,7 +245,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.retryRating = true;
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.retryRating = true;
         })
         .finally(() => {
@@ -260,6 +260,18 @@ class NJFeedbackWidget extends window.HTMLElement {
 
   hideElement(selector) {
     this.querySelector(selector).style.display = "none";
+  }
+
+  // Only one label may point at a given form control at a time, or WAVE flags
+  // a "multiple form labels" error even when the others are visually hidden.
+  showLabelElement(selector, forId) {
+    this.showElement(selector);
+    this.querySelector(selector).setAttribute("for", forId);
+  }
+
+  hideLabelElement(selector) {
+    this.hideElement(selector);
+    this.querySelector(selector).removeAttribute("for");
   }
 
   getHTML() {
@@ -287,12 +299,12 @@ class NJFeedbackWidget extends window.HTMLElement {
         <form id="commentForm" data-testid="commentForm">
           <div class="grid-box">
             <div>
-              <label id="commentPromptTextPos" for="comment" class="feedback-text"
-                >${content.commentPromptPositive}</label
-              >
-              <label id="commentPromptTextNeg" for="comment" class="feedback-text"
-                >${content.commentPromptNegative}</label
-              >
+              <label id="commentPromptTextPos" for="comment" class="feedback-text">
+               ${content.commentPromptPositive}
+              </label>
+              <label id="commentPromptTextNeg" class="feedback-text">
+                ${content.commentPromptNegative}
+              </label>
               ${
                 showCommentDisclaimer
                   ? `<p class="disclaimer-text">
@@ -322,9 +334,9 @@ class NJFeedbackWidget extends window.HTMLElement {
                 class="feedback-button float-right submit-button"
                 type="submit">
                  <span id="commentSubmitText">${content.commentSubmit}</span>
-                 <span id="commentSubmitLoadingText" style="display:none">${
-                   content.commentSubmitLoading
-                 }</span>  
+                 <span id="commentSubmitLoadingText" style="display:none">
+                  ${content.commentSubmitLoading}
+                 </span>  
             </button>
             </div>
           </div>
@@ -338,9 +350,7 @@ class NJFeedbackWidget extends window.HTMLElement {
               <p class="disclaimer-text">${content.emailPrompt}</p>
               </div>
               <div>
-                <label for="email" class="email-label">${
-                  content.emailLabel
-                }</label>
+                <label for="email" class="email-label">${content.emailLabel}</label>
                 <input
                   type="email"
                   id="email"

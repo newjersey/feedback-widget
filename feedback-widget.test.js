@@ -1,6 +1,6 @@
 const { NJFeedbackWidget, LANG_TO_CONTENT } = require("./feedback-widget.js");
 require("@testing-library/jest-dom");
-const { screen, fireEvent, getAllByRole } = require("@testing-library/dom");
+const { screen, fireEvent } = require("@testing-library/dom");
 const userEvent = require("@testing-library/user-event").default;
 
 beforeAll(() => {
@@ -21,6 +21,19 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+const assertOnlyLabelOnCommentTextarea = (activeLabel) => {
+  const textarea = screen.getByLabelText(activeLabel);
+  expect(textarea).toBeVisible();
+  expect(textarea.labels).toHaveLength(1);
+};
+
+it("only one comment prompt label is associated with the comment textarea before a rating is chosen", () => {
+  expect(screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)).toBeVisible();
+
+  const commentTextarea = screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptPositive);
+  expect(commentTextarea.labels).toHaveLength(1);
+});
+
 describe("feedbackWidget", () => {
   describe("handleRating", () => {
     it("shows positive prompt text when 'Yes' is clicked", async () => {
@@ -30,14 +43,15 @@ describe("feedbackWidget", () => {
       await userEvent.click(yesButton);
 
       expect(
-        screen.queryByText(LANG_TO_CONTENT.en.commentPromptNegative)
+        screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)
       ).not.toBeVisible();
       expect(
-        screen.queryByText(LANG_TO_CONTENT.en.ratingPrompt)
+        screen.getByText(LANG_TO_CONTENT.en.commentPromptNegative)
       ).not.toBeVisible();
-      expect(
-        screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptPositive)
-      ).toBeVisible();
+
+      assertOnlyLabelOnCommentTextarea(
+        LANG_TO_CONTENT.en.commentPromptPositive
+      );
     });
 
     it("shows negative prompt text when 'No' is clicked", async () => {
@@ -47,14 +61,15 @@ describe("feedbackWidget", () => {
       await userEvent.click(noButton);
 
       expect(
-        screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptNegative)
-      ).toBeVisible();
-      expect(
-        screen.queryByText(LANG_TO_CONTENT.en.commentPromptPositive)
+        screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)
       ).not.toBeVisible();
       expect(
-        screen.queryByText(LANG_TO_CONTENT.en.ratingNegative)
+        screen.getByText(LANG_TO_CONTENT.en.commentPromptPositive)
       ).not.toBeVisible();
+
+      assertOnlyLabelOnCommentTextarea(
+        LANG_TO_CONTENT.en.commentPromptNegative
+      );
     });
   });
 
