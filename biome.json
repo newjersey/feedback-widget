@@ -1,7 +1,12 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "includes": ["**", "!package-lock.json", "!feedback-widget.min.js"]
+    "includes": [
+      "**",
+      "!package-lock.json",
+      "!.claude",
+      "!feedback-widget.min.js"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -15,16 +20,13 @@
     "rules": {
       "preset": "recommended",
       "complexity": {
-        "noExcessiveCognitiveComplexity": "warn",
-        "noExcessiveLinesPerFunction": {
-          "level": "warn",
-          "options": { "maxLines": 80 }
-        },
         "noForEach": "error",
         "useArrowFunction": "error",
         "useMaxParams": {
           "level": "error",
-          "options": { "max": 2 }
+          "options": {
+            "max": 4
+          }
         }
       },
       "correctness": {
@@ -32,16 +34,32 @@
         "noUnusedVariables": "error"
       },
       "style": {
+        "noCommonJs": "off",
         "noParameterAssign": "error",
         "useConst": "error",
+        "useExportType": "error",
+        "useImportType": "error",
+        "useNodejsImportProtocol": "error",
         "useTemplate": "error",
         "useThrowOnlyError": "error",
         "useErrorCause": "error"
       },
       "suspicious": {
-        "noConsole": "warn",
+        "noConsole": "error",
+        "noExplicitAny": "error",
+        "noImportCycles": "error",
         "noVar": "error",
         "noNestedPromises": "error"
+      },
+      "nursery": {
+        "noFloatingPromises": "error"
+      }
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
       }
     }
   },
@@ -50,6 +68,7 @@
       "arrowParentheses": "always",
       "bracketSameLine": false,
       "bracketSpacing": true,
+      "jsxQuoteStyle": "double",
       "quoteStyle": "double",
       "semicolons": "always",
       "trailingCommas": "es5"

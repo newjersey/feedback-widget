@@ -30,7 +30,9 @@ const assertOnlyLabelOnCommentTextarea = (activeLabel) => {
 it("only one comment prompt label is associated with the comment textarea before a rating is chosen", () => {
   expect(screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)).toBeVisible();
 
-  const commentTextarea = screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptPositive);
+  const commentTextarea = screen.getByLabelText(
+    LANG_TO_CONTENT.en.commentPromptPositive
+  );
   expect(commentTextarea.labels).toHaveLength(1);
 });
 
