@@ -40,6 +40,6 @@
     "testEnvironment": "jsdom"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "biome check --write --no-errors-on-unmatched"
+    "*.{js,jsx,ts,tsx}": ["biome check --write --no-errors-on-unmatched", "npm run test"]
   }
 }
