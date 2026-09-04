@@ -3,17 +3,14 @@
   "files": {
     "includes": [
       "**",
-      "!**/.yarn/*",
       "!package-lock.json",
-      "!pnpm-lock.yaml",
-      "!yarn.lock",
-      "!bun.lockb",
-      "!.claude"
+      "!.claude",
+      "!feedback-widget.min.js"
     ]
   },
   "formatter": {
     "enabled": true,
-    "lineWidth": 100,
+    "lineWidth": 80,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf"
@@ -37,7 +34,7 @@
         "noUnusedVariables": "error"
       },
       "style": {
-        "noCommonJs": "error",
+        "noCommonJs": "off",
         "noParameterAssign": "error",
         "useConst": "error",
         "useExportType": "error",
@@ -74,7 +71,7 @@
       "jsxQuoteStyle": "double",
       "quoteStyle": "double",
       "semicolons": "always",
-      "trailingCommas": "all"
+      "trailingCommas": "es5"
     }
   }
 }
