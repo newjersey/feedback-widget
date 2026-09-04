@@ -143,7 +143,7 @@ class NJFeedbackWidget extends window.HTMLElement {
           if (data.message === "Success" && this.feedbackId != null) {
             this.hideElement("#commentPrompt");
             if (this.getAttribute("skip-email-step") === "true") {
-              this.showElement("#confirmation", "flex");
+              this.showElement("#confirmation", { display: "flex" });
             } else {
               this.showElement("#emailPrompt");
             }
@@ -189,7 +189,7 @@ class NJFeedbackWidget extends window.HTMLElement {
         .then((data) => {
           if (data.message === "Success" && data.feedbackId != null) {
             this.hideElement("#emailPrompt");
-            this.showElement("#confirmation", "flex");
+            this.showElement("#confirmation", { display: "flex" });
           } else {
             this.showElement("#emailSubmitError");
           }
@@ -210,11 +210,11 @@ class NJFeedbackWidget extends window.HTMLElement {
 
     this.rating = rating;
     if (rating) {
-      this.hideLabelElement("#commentPromptTextNeg");
-      this.showLabelElement("#commentPromptTextPos", "comment");
+      this.hideElement("#commentPromptTextNeg");
+      this.showElement("#commentPromptTextPos", { display: "inline" });
     } else {
-      this.hideLabelElement("#commentPromptTextPos");
-      this.showLabelElement("#commentPromptTextNeg", "comment");
+      this.hideElement("#commentPromptTextPos");
+      this.showElement("#commentPromptTextNeg", { display: "inline" });
     }
 
     this.hideElement("#ratingPrompt");
@@ -254,24 +254,12 @@ class NJFeedbackWidget extends window.HTMLElement {
     }
   }
 
-  showElement(selector, displayType = "block") {
-    this.querySelector(selector).style.display = displayType;
+  showElement(selector, { display = "block" } = {}) {
+    this.querySelector(selector).style.display = display;
   }
 
   hideElement(selector) {
     this.querySelector(selector).style.display = "none";
-  }
-
-  // Only one label may point at a given form control at a time, or WAVE flags
-  // a "multiple form labels" error even when the others are visually hidden.
-  showLabelElement(selector, forId) {
-    this.showElement(selector);
-    this.querySelector(selector).setAttribute("for", forId);
-  }
-
-  hideLabelElement(selector) {
-    this.hideElement(selector);
-    this.querySelector(selector).removeAttribute("for");
   }
 
   getHTML() {
@@ -299,11 +287,9 @@ class NJFeedbackWidget extends window.HTMLElement {
         <form id="commentForm" data-testid="commentForm">
           <div class="grid-box">
             <div>
-              <label id="commentPromptTextPos" for="comment" class="feedback-text">
-               ${content.commentPromptPositive}
-              </label>
-              <label id="commentPromptTextNeg" class="feedback-text">
-                ${content.commentPromptNegative}
+              <label for="comment" class="feedback-text">
+                <span id="commentPromptTextPos">${content.commentPromptPositive}</span>
+                <span id="commentPromptTextNeg" style="display:none">${content.commentPromptNegative}</span>
               </label>
               ${
                 showCommentDisclaimer

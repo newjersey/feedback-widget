@@ -12,8 +12,10 @@ beforeAll(() => {
   );
 });
 
+let widget;
+
 beforeEach(() => {
-  const widget = new NJFeedbackWidget();
+  widget = new NJFeedbackWidget();
   document.body.appendChild(widget);
 });
 
@@ -21,20 +23,43 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-const assertOnlyLabelOnCommentTextarea = (activeLabel) => {
-  const textarea = screen.getByLabelText(activeLabel);
-  expect(textarea).toBeVisible();
-  expect(textarea.labels).toHaveLength(1);
-};
-
 it("only one comment prompt label is associated with the comment textarea before a rating is chosen", () => {
   expect(screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)).toBeVisible();
 
-  const commentTextarea = screen.getByLabelText(LANG_TO_CONTENT.en.commentPromptPositive);
+  const commentTextarea = screen.getByRole("textbox", {
+    name: LANG_TO_CONTENT.en.commentPromptPositive,
+    hidden: true,
+  });
   expect(commentTextarea.labels).toHaveLength(1);
 });
 
 describe("feedbackWidget", () => {
+  describe("showElement", () => {
+    it("defaults to display: block when no options are passed", () => {
+      widget.showElement("#emailPrompt");
+
+      expect(widget.querySelector("#emailPrompt").style.display).toBe(
+        "block"
+      );
+    });
+
+    it("defaults to display: block when an empty options object is passed", () => {
+      widget.showElement("#emailPrompt", {});
+
+      expect(widget.querySelector("#emailPrompt").style.display).toBe(
+        "block"
+      );
+    });
+
+    it("uses the given display value when one is passed", () => {
+      widget.showElement("#emailPrompt", { display: "flex" });
+
+      expect(widget.querySelector("#emailPrompt").style.display).toBe(
+        "flex"
+      );
+    });
+  });
+
   describe("handleRating", () => {
     it("shows positive prompt text when 'Yes' is clicked", async () => {
       const yesButton = screen.getByRole("button", {
@@ -49,9 +74,11 @@ describe("feedbackWidget", () => {
         screen.getByText(LANG_TO_CONTENT.en.commentPromptNegative)
       ).not.toBeVisible();
 
-      assertOnlyLabelOnCommentTextarea(
-        LANG_TO_CONTENT.en.commentPromptPositive
-      );
+      const commentTextarea = screen.getByRole("textbox", {
+        name: LANG_TO_CONTENT.en.commentPromptPositive,
+      });
+      expect(commentTextarea).toBeVisible();
+      expect(commentTextarea.labels).toHaveLength(1);
     });
 
     it("shows negative prompt text when 'No' is clicked", async () => {
@@ -67,9 +94,11 @@ describe("feedbackWidget", () => {
         screen.getByText(LANG_TO_CONTENT.en.commentPromptPositive)
       ).not.toBeVisible();
 
-      assertOnlyLabelOnCommentTextarea(
-        LANG_TO_CONTENT.en.commentPromptNegative
-      );
+      const commentTextarea = screen.getByRole("textbox", {
+        name: LANG_TO_CONTENT.en.commentPromptNegative,
+      });
+      expect(commentTextarea).toBeVisible();
+      expect(commentTextarea.labels).toHaveLength(1);
     });
   });
 
