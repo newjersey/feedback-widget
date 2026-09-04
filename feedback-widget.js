@@ -289,7 +289,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             <div>
               <label for="comment" class="feedback-text">
                 <span id="commentPromptTextPos">${content.commentPromptPositive}</span>
-                <span id="commentPromptTextNeg" style="display:none">${content.commentPromptNegative}</span>
+                <span id="commentPromptTextNeg">${content.commentPromptNegative}</span>
               </label>
               ${
                 showCommentDisclaimer
