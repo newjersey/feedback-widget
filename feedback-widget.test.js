@@ -23,7 +23,7 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-it("only one comment prompt label is associated with the comment textarea before a rating is chosen", () => {
+it("only one comment prompt label is associated with the comment textarea", () => {
   expect(screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)).toBeVisible();
 
   const commentTextarea = screen.getByRole("textbox", {
