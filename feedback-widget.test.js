@@ -27,7 +27,7 @@ it("only one comment prompt label is associated with the comment textarea before
   expect(screen.getByText(LANG_TO_CONTENT.en.ratingPrompt)).toBeVisible();
 
   const commentTextarea = screen.getByRole("textbox", {
-    name: LANG_TO_CONTENT.en.commentPromptPositive,
+    name: RegExp(LANG_TO_CONTENT.en.commentPromptPositive),
     hidden: true,
   });
   expect(commentTextarea.labels).toHaveLength(1);
