@@ -64,10 +64,10 @@ This frontend component is meant for use on New Jersey pages, and is hardcoded t
 import "@newjersey/feedback-widget/feedback-widget.min.js";
 ```
 
-3. If using TypeScript, add the following type definition to the file where you added the import
+3. If using TypeScript and React 19+, add the following type definition to the file where you added the import
 
 ```typescript
-declare global {
+declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
       "feedback-widget": React.DetailedHTMLProps<
