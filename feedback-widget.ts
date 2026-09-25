@@ -1,4 +1,15 @@
-function logGoogleEvent(action, label = undefined) {
+declare global {
+  interface Window {
+    gtag?: (
+      command: string,
+      action: string,
+      params: Record<string, unknown>
+    ) => void;
+    dataLayer?: Record<string, unknown>[];
+  }
+}
+
+function logGoogleEvent(action: string, label?: string): void {
   if (typeof window.gtag === "function") {
     window.gtag("event", action, {
       event_category: "Page feedback",
@@ -12,7 +23,26 @@ function logGoogleEvent(action, label = undefined) {
   }
 }
 
-const LANG_TO_CONTENT = {
+interface LangContent {
+  ratingPrompt: string;
+  ratingPositive: string;
+  ratingNegative: string;
+  commentPromptPositive: string;
+  commentPromptNegative: string;
+  commentPromptDisclaimer: string;
+  commentPromptDisclaimerLink: string;
+  commentSubmit: string;
+  commentSubmitLoading: string;
+  commentConfirmation: string;
+  emailPrompt: string;
+  emailLabel: string;
+  emailSubmit: string;
+  emailSubmitLoading: string;
+  errorMessage: string;
+  emailConfirmation: string;
+}
+
+const LANG_TO_CONTENT: Record<"en" | "es", LangContent> = {
   en: {
     ratingPrompt: "Did you find what you were looking for on this page?",
     ratingPositive: "Yes",
@@ -61,21 +91,32 @@ const LANG_TO_CONTENT = {
   },
 };
 
+interface ApiResponse {
+  message: string;
+  feedbackId?: string
+}
+
 const API_URL = "https://innovation.nj.gov/app/feedback/dev";
 const JSON_HEADER = {
   "Content-Type": "application/json",
 };
 
-class NJFeedbackWidget extends window.HTMLElement {
+class NJFeedbackWidget extends HTMLElement {
+  rating: boolean;
+  feedbackId: string | undefined;
+  retryRating: boolean;
+  language: string;
+
   constructor() {
     super();
     this.rating = false;
     this.feedbackId = undefined;
     this.retryRating = false;
-    this.language = new URL(window.location).searchParams.get("lang") ?? "en";
+    this.language =
+      new URL(window.location.href).searchParams.get("lang") ?? "en";
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.innerHTML = this.getHTML();
     this.applyListeners();
     this.addStyling();
@@ -85,30 +126,36 @@ class NJFeedbackWidget extends window.HTMLElement {
     );
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     document.removeEventListener(
       "changeLanguage",
       this.handleChangeLanguage.bind(this)
     );
   }
 
-  handleChangeLanguage(e) {
-    this.language = e.detail;
+  handleChangeLanguage(e: Event): void {
+    this.language = (e as CustomEvent<string>).detail;
     this.innerHTML = this.getHTML();
     this.applyListeners();
   }
 
-  applyListeners() {
-    this.querySelector("#yesButton").addEventListener("click", (_e) => {
-      this.handleRating(true);
-    });
+  applyListeners(): void {
+    (this.querySelector("#yesButton") as HTMLButtonElement).addEventListener(
+      "click",
+      (_e) => {
+        this.handleRating(true);
+      }
+    );
 
-    this.querySelector("#noButton").addEventListener("click", (_e) => {
-      this.handleRating(false);
-    });
+    (this.querySelector("#noButton") as HTMLButtonElement).addEventListener(
+      "click",
+      (_e) => {
+        this.handleRating(false);
+      }
+    );
 
-    const commentForm = this.querySelector("#commentForm");
-    const commentButton = document.getElementById("commentSubmit");
+    const commentForm = this.querySelector("#commentForm") as HTMLFormElement;
+    const commentButton = this.querySelector("#commentSubmit") as HTMLButtonElement;
     commentButton.addEventListener("click", (e) => {
       if (commentButton.getAttribute("aria-disabled") === "true") {
         e.preventDefault();
@@ -122,7 +169,10 @@ class NJFeedbackWidget extends window.HTMLElement {
       this.hideElement("#commentSubmitText");
       this.showElement("#commentSubmitLoadingText");
 
-      const comment = e.target.elements.comment.value;
+      const form = e.target as HTMLFormElement;
+      const comment = (
+        form.elements.namedItem("comment") as HTMLTextAreaElement
+      ).value;
       const postData =
         this.retryRating || this.feedbackId == null
           ? { comment, rating: this.rating, pageURL: window.location.href }
@@ -136,7 +186,7 @@ class NJFeedbackWidget extends window.HTMLElement {
         body: JSON.stringify(postData),
       })
         .then((response) => response.json())
-        .then((data) => {
+        .then((data: ApiResponse) => {
           if (this.feedbackId == null) {
             this.feedbackId = data.feedbackId;
           }
@@ -161,8 +211,8 @@ class NJFeedbackWidget extends window.HTMLElement {
         });
     });
 
-    const emailForm = this.querySelector("#emailForm");
-    const emailButton = document.getElementById("emailSubmit");
+    const emailForm = this.querySelector("#emailForm") as HTMLFormElement;
+    const emailButton = this.querySelector("#emailSubmit") as HTMLButtonElement;
     emailButton.addEventListener("click", (e) => {
       if (emailButton.getAttribute("aria-disabled") === "true") {
         e.preventDefault();
@@ -176,9 +226,10 @@ class NJFeedbackWidget extends window.HTMLElement {
       this.hideElement("#emailSubmitText");
       this.showElement("#emailSubmitLoadingText");
 
+      const form = e.target as HTMLFormElement;
       const postData = {
         feedbackId: this.feedbackId,
-        email: e.target.elements.email.value,
+        email: (form.elements.namedItem("email") as HTMLInputElement).value,
       };
       fetch(`${API_URL}/email`, {
         method: "POST",
@@ -186,7 +237,7 @@ class NJFeedbackWidget extends window.HTMLElement {
         body: JSON.stringify(postData),
       })
         .then((response) => response.json())
-        .then((data) => {
+        .then((data: ApiResponse) => {
           if (data.message === "Success" && data.feedbackId != null) {
             this.hideElement("#emailPrompt");
             this.showElement("#confirmation", { display: "flex" });
@@ -205,8 +256,10 @@ class NJFeedbackWidget extends window.HTMLElement {
     });
   }
 
-  handleRating(rating) {
-    const commentButton = document.getElementById("commentSubmit");
+  handleRating(rating: boolean): void {
+    const commentButton = document.getElementById(
+      "commentSubmit"
+    ) as HTMLButtonElement;
 
     this.rating = rating;
     if (rating) {
@@ -237,7 +290,7 @@ class NJFeedbackWidget extends window.HTMLElement {
         body: JSON.stringify(postData),
       })
         .then((response) => response.json())
-        .then((data) => {
+        .then((data: ApiResponse) => {
           if (data.message === "Success" && data.feedbackId != null) {
             this.feedbackId = data.feedbackId;
             logGoogleEvent("Clicked initial button", rating ? "Yes" : "No");
@@ -254,16 +307,16 @@ class NJFeedbackWidget extends window.HTMLElement {
     }
   }
 
-  showElement(selector, { display = "block" } = {}) {
-    this.querySelector(selector).style.display = display;
+  showElement(selector: string, { display = "block" } = {}): void {
+    (this.querySelector(selector) as HTMLElement).style.display = display;
   }
 
-  hideElement(selector) {
-    this.querySelector(selector).style.display = "none";
+  hideElement(selector: string): void {
+    (this.querySelector(selector) as HTMLElement).style.display = "none";
   }
 
-  getHTML() {
-    const content = LANG_TO_CONTENT[this.language];
+  getHTML(): string {
+    const content = LANG_TO_CONTENT[this.language as "en" | "es"] ?? LANG_TO_CONTENT.en;
     const contactLink =
       this.getAttribute("contact-link") ||
       "https://www.nj.gov/nj/feedback.html";
@@ -322,7 +375,7 @@ class NJFeedbackWidget extends window.HTMLElement {
                  <span id="commentSubmitText">${content.commentSubmit}</span>
                  <span id="commentSubmitLoadingText" style="display:none">
                   ${content.commentSubmitLoading}
-                 </span>  
+                 </span>
             </button>
             </div>
           </div>
@@ -377,14 +430,14 @@ class NJFeedbackWidget extends window.HTMLElement {
     return html;
   }
 
-  addStyling() {
+  addStyling(): void {
     const style = document.createElement("style");
     style.textContent = /*css*/ `
       .feedback-container {
         background-color: #f0f0f0;
         padding: 1.9rem 2.5rem;
       }
-      
+
       .flex-box {
         display: flex;
         justify-content: space-between;
@@ -392,33 +445,33 @@ class NJFeedbackWidget extends window.HTMLElement {
         flex-wrap: wrap;
         gap: 1.5rem;
       }
-      
+
       .grid-box {
         display: grid;
         grid-template-columns: 1fr 1fr;
         column-gap: 1.5rem;
       }
-      
+
       @media screen and (max-width: 765px) {
         .flex-box {
           justify-content: center;
         }
-      
+
         .grid-box {
           grid-template-columns: 1fr;
         }
       }
-      
+
       .feedback-text {
         font-weight: 600;
         font-size: 22px;
         color: #1b1b1b;
       }
-      
+
       .disclaimer-text {
         margin: 1rem 0;
       }
-      
+
       .email-label {
         font-weight: 600;
         margin: 0.5rem 0;
@@ -448,13 +501,13 @@ class NJFeedbackWidget extends window.HTMLElement {
         font-size: 22px;
         margin-left: 1rem;
       }
-      
+
       .feedback-button-group {
         display: flex;
         gap: 1.25rem;
         flex-wrap: wrap;
       }
-      
+
       .feedback-button {
         font-family: inherit;
         font-weight: 600;
@@ -470,11 +523,11 @@ class NJFeedbackWidget extends window.HTMLElement {
         text-decoration: none;
         text-align: center;
       }
-      
+
       .feedback-button.float-right {
         float: right;
       }
-      
+
       .feedback-button:hover {
         border-color: #3d4551;
         background-color: #3d4551;
@@ -489,30 +542,30 @@ class NJFeedbackWidget extends window.HTMLElement {
         color: #ffffff !important;
         text-decoration: none;
       }
-      
+
       @media screen and (max-width: 450px) {
         .feedback-button-group {
           justify-content: center;
         }
-      
+
         .feedback-button {
           width: 100%;
         }
       }
-      
+
       .feedback-input {
         width: 100%;
         border: 1px solid #a9aeb1;
         border-radius: 0px;
         padding: 0.5rem;
       }
-      
+
       .feedback-input:focus {
         outline: none;
         border-color: #86b7fe;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
       }
-      
+
       #commentPrompt,
       #emailPrompt,
       #emailFormSubmitted,
@@ -522,11 +575,10 @@ class NJFeedbackWidget extends window.HTMLElement {
         display: none;
       }
     `;
-    document.querySelector("head").appendChild(style);
+    document.querySelector("head")?.appendChild(style);
   }
 }
 
 window.customElements.define("feedback-widget", NJFeedbackWidget);
-if (typeof module !== "undefined") {
-  module.exports = { NJFeedbackWidget, LANG_TO_CONTENT };
-}
+
+export { LANG_TO_CONTENT, NJFeedbackWidget };
