@@ -1,18 +1,18 @@
-const { NJFeedbackWidget, LANG_TO_CONTENT } = require("./feedback-widget.js");
-require("@testing-library/jest-dom");
-const { screen, fireEvent } = require("@testing-library/dom");
-const userEvent = require("@testing-library/user-event").default;
+import { LANG_TO_CONTENT, NJFeedbackWidget } from "./feedback-widget";
+import "@testing-library/jest-dom";
+import { fireEvent, screen } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 
 beforeAll(() => {
-  global.fetch = jest.fn(() =>
+  globalThis.fetch = jest.fn(() =>
     Promise.resolve({
       json: () =>
         Promise.resolve({ message: "Success", feedbackId: "test123" }),
     })
-  );
+  ) as jest.Mock;
 });
 
-let widget;
+let widget: NJFeedbackWidget;
 
 beforeEach(() => {
   widget = new NJFeedbackWidget();
@@ -29,7 +29,7 @@ it("only one comment prompt label is associated with the comment textarea", () =
   const commentTextarea = screen.getByRole("textbox", {
     name: RegExp(LANG_TO_CONTENT.en.commentPromptPositive),
     hidden: true,
-  });
+  }) as HTMLTextAreaElement;
   expect(commentTextarea.labels).toHaveLength(1);
 });
 
@@ -38,25 +38,23 @@ describe("feedbackWidget", () => {
     it("defaults to display: block when no options are passed", () => {
       widget.showElement("#emailPrompt");
 
-      expect(widget.querySelector("#emailPrompt").style.display).toBe(
-        "block"
+      expect(widget.querySelector("#emailPrompt")).toHaveStyle(
+        "display: block"
       );
     });
 
     it("defaults to display: block when an empty options object is passed", () => {
       widget.showElement("#emailPrompt", {});
 
-      expect(widget.querySelector("#emailPrompt").style.display).toBe(
-        "block"
+      expect(widget.querySelector("#emailPrompt")).toHaveStyle(
+        "display: block"
       );
     });
 
     it("uses the given display value when one is passed", () => {
       widget.showElement("#emailPrompt", { display: "flex" });
 
-      expect(widget.querySelector("#emailPrompt").style.display).toBe(
-        "flex"
-      );
+      expect(widget.querySelector("#emailPrompt")).toHaveStyle("display: flex");
     });
   });
 
@@ -76,7 +74,7 @@ describe("feedbackWidget", () => {
 
       const commentTextarea = screen.getByRole("textbox", {
         name: LANG_TO_CONTENT.en.commentPromptPositive,
-      });
+      }) as HTMLTextAreaElement;
       expect(commentTextarea).toBeVisible();
       expect(commentTextarea.labels).toHaveLength(1);
     });
@@ -96,7 +94,7 @@ describe("feedbackWidget", () => {
 
       const commentTextarea = screen.getByRole("textbox", {
         name: LANG_TO_CONTENT.en.commentPromptNegative,
-      });
+      }) as HTMLTextAreaElement;
       expect(commentTextarea).toBeVisible();
       expect(commentTextarea.labels).toHaveLength(1);
     });
