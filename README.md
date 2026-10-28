@@ -98,7 +98,7 @@ declare global {
 ```
 
 You can change the version number after the @ sign to match your desired release (https://github.com/newjersey/feedback-widget/releases).
-For example, if the latest version is 0.8.0 so you would use the following script tag: 
+For example, if the latest version is 0.8.0, you would use the following script tag:: 
 ```javascript
 <script
   src="https://unpkg.com/@newjersey/feedback-widget@0.8.0/feedback-widget.min.js"
