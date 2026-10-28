@@ -14,10 +14,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Use Node.js 20.x
+      - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
-      - run: npm install pa11y-ci
-      - run: npx pa11y-ci
+   
+      - name: Allow Chrome sandbox (unprivileged user namespaces)
+        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+    
+      - name: Install dependencies
+        run: npm install pa11y-ci
+      
+      - name: Run accessibility tests
+        run: npx pa11y-ci
