@@ -359,12 +359,13 @@ class NJFeedbackWidget extends window.HTMLElement {
                     content.emailSubmitLoading
                   }</span>
                </button>
+
+               <p class="link-privacy">
+                <a href="https://nj.gov/nj/privacy.shtml">${content.privacyNoticeLinkText}</a>
+              </p>
             </div>
           </div>
         </form>
-        <p class="link-privacy">
-          <a href="https://nj.gov/nj/privacy.shtml">${content.privacyNoticeLinkText}</a>
-        </p>
       </div>
       <div id="confirmation" class="confirmation">
         <img
@@ -528,10 +529,18 @@ class NJFeedbackWidget extends window.HTMLElement {
       }
 
       .link-privacy {
-        text-align: right;
-        padding-top: 1rem;
-        max-width: 100%;
-    }
+        display: inline-block;
+        padding-top: .5rem;
+      }
+      @media screen and (max-width: 450px) {
+       .link-privacy {
+          display: block;
+          text-align: right;
+          padding-top: 1rem;
+          max-width: 100%;
+          clear: both;
+        }
+      }
     `;
     document.querySelector("head").appendChild(style);
   }
