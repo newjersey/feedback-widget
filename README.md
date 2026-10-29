@@ -132,7 +132,7 @@ If your site has a [Content Security Policy](https://developer.mozilla.org/en-US
 
 ### Testing during development
 
-When checking that your implementation is working, don't rely solely on the shared Looker Dashboard because the pipeline from Google Sheets to Looker can be very delayed. Instead, look for an `HTTP 200` response containing `{message: "Success", feedbackId: number}`. If you need, the OOI Platform team can verify the `feedbackId` is valid.
+When checking that your implementation is working, don't rely solely on the shared Looker Dashboard because the pipeline from Google Sheets to Looker can be very delayed. Instead, look for an `HTTP 200` response containing `{message: "Success", feedbackId: number}`. If you need, the NJIA Platform team can verify the `feedbackId` is valid.
 
 ## [FOR DEVELOPERS] How to improve this component
 

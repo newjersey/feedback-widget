@@ -38,25 +38,19 @@ describe("feedbackWidget", () => {
     it("defaults to display: block when no options are passed", () => {
       widget.showElement("#emailPrompt");
 
-      expect(widget.querySelector("#emailPrompt").style.display).toBe(
-        "block"
-      );
+      expect(widget.querySelector("#emailPrompt").style.display).toBe("block");
     });
 
     it("defaults to display: block when an empty options object is passed", () => {
       widget.showElement("#emailPrompt", {});
 
-      expect(widget.querySelector("#emailPrompt").style.display).toBe(
-        "block"
-      );
+      expect(widget.querySelector("#emailPrompt").style.display).toBe("block");
     });
 
     it("uses the given display value when one is passed", () => {
       widget.showElement("#emailPrompt", { display: "flex" });
 
-      expect(widget.querySelector("#emailPrompt").style.display).toBe(
-        "flex"
-      );
+      expect(widget.querySelector("#emailPrompt").style.display).toBe("flex");
     });
   });
 

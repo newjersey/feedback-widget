@@ -28,13 +28,14 @@ const LANG_TO_CONTENT = {
     commentSubmitLoading: "Sending...",
     commentConfirmation: "Thanks for sharing your thoughts!",
     emailPrompt:
-      "To hear about paid feedback opportunities in the future, join our user testing list.",
+      "Learn about feedback opportunities by joining our mailing list.",
     emailLabel: "Email address",
     emailSubmit: "Join the list",
     emailSubmitLoading: "Joining...",
     errorMessage:
       "Try again, please. We didn't get your answer because of a technical issue.",
     emailConfirmation: "Thanks for signing up!",
+    privacyNoticeLinkText: "Privacy Notice",
   },
   es: {
     ratingPrompt: "¿Encontraste lo que buscabas en esta página?",
@@ -51,13 +52,14 @@ const LANG_TO_CONTENT = {
     commentSubmitLoading: "Enviando...",
     commentConfirmation: "¡Gracias por compartir tus ideas!",
     emailPrompt:
-      "Para conocer mas oportunidades de comentarios pagados en el futuro, sea parte de nuestra lista de prueba de usuarios.",
+      "Suscríbase a nuestro boletín electrónico para enterarse sobre oportunidades para compartir sus comentarios.",
     emailLabel: "Dirección de correo electrónico",
     emailSubmit: "Sea parte de la lista",
     emailSubmitLoading: "Enviando...",
     errorMessage:
       "Por favor, inténtalo de nuevo. No obtuvimos su respuesta debido a un problema técnico.",
     emailConfirmation: "¡Gracias por registrarte!",
+    privacyNoticeLinkText: "Política de privacidad",
   },
 };
 
@@ -360,6 +362,9 @@ class NJFeedbackWidget extends window.HTMLElement {
             </div>
           </div>
         </form>
+        <p class="link-privacy">
+          <a href="https://nj.gov/nj/privacy.shtml">${content.privacyNoticeLinkText}</a>
+        </p>
       </div>
       <div id="confirmation" class="confirmation">
         <img
@@ -521,6 +526,12 @@ class NJFeedbackWidget extends window.HTMLElement {
       #confirmation {
         display: none;
       }
+
+      .link-privacy {
+        text-align: right;
+        padding-top: 1rem;
+        max-width: 100%;
+    }
     `;
     document.querySelector("head").appendChild(style);
   }
