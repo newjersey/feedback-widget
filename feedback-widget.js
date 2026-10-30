@@ -530,7 +530,7 @@ class NJFeedbackWidget extends window.HTMLElement {
 
       .link-privacy {
         display: inline-block;
-        padding-top: .5rem;
+        margin-top: .5rem;
       }
       @media screen and (max-width: 450px) {
        .link-privacy {
