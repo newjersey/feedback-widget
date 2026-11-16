@@ -4,6 +4,7 @@
   "description": "Feedback widget to add to a web page, from the New Jersey Office of Innovation",
   "main": "feedback-widget.min.js",
   "scripts": {
+    "dev": "node dev/server.js",
     "test": "npx jest",
     "format": "biome format --write .",
     "format:check": "biome format .",

@@ -145,6 +145,31 @@ Whenever there is a change to `feedback-widget.js`, update the minified file bef
    - NOTE: No need to `cd` if you're already in `feedback-widget`; check the `.nvmrc` for the latest Node version
 3. `uglifyjs feedback-widget.js -c -o feedback-widget.min.js`
 
+### Running locally
+
+The widget needs the Feedback API to get through the full rating → comment → email flow. `npm run dev` starts a local server that serves the widget and a mock of the API, so you can test every step without AWS access and without writing to the prod Google Sheet.
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000. The page at the top lists links for common scenarios: analytics-only ratings, skipping the email step, hiding the comment disclaimer, Spanish, and loading `feedback-widget.min.js` instead of the source. You can also set any widget attribute through the query string, e.g. `/?skip-email-step=true&lang=es`. The terminal prints every request body and the record the mock saved. Analytics events are logged to the browser console.
+
+`feedback-widget.js` isn't changed for this. When the dev server serves the file, it swaps the production `API_URL` for the local mock (`/api`), so you can't commit a dev URL by mistake. If `API_URL` changes, the server shows an error until `PROD_API_URL` in `dev/server.js` is updated to match. Reload the page to pick up edits; the server doesn't cache.
+
+To test the error and retry states, make endpoints fail:
+
+```bash
+npm run dev -- --fail=rating                    # rating returns 500; the comment step should re-send the rating
+npm run dev -- --fail=comment,email             # comment and email return 500
+npm run dev -- --fail=email --fail-mode=network # the connection drops, so fetch rejects
+npm run dev -- --delay=2000                     # slow responses, to check the loading text
+npm run dev -- --port=4000
+```
+
+The mock copies the real API's validation and response shapes, including returning 500 for invalid submissions, and uses sheet row numbers as `feedbackId`s starting at 2. It does not redact PII from comments, and data is lost when the server stops. Before a release, it's still worth checking against the deployed API (see "Test API requests in the browser" in the [feedback-api README](https://github.com/newjersey/feedback-api#test-api-requests-in-the-browser)). That path writes to the prod Google Sheet.
+
 ### Testing your updates
 
 Steps to test your updates on a site that embeds the feedback widget can be found in [Feedback Widget Testing via DevTools](https://docs.google.com/document/d/1QYVS7VryECW87C5CqLyZQF_wbnHPxZcZ9ThHLzgxLW8/edit?tab=t.0#heading=h.xklo0mrls5cd).
