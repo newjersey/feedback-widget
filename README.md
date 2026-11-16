@@ -154,9 +154,9 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. The page at the top lists links for common scenarios: analytics-only ratings, skipping the email step, hiding the comment disclaimer, Spanish, and loading `feedback-widget.min.js` instead of the source. You can also set any widget attribute through the query string, e.g. `/?skip-email-step=true&lang=es`. The terminal prints every request body and the record the mock saved. Analytics events are logged to the browser console.
+Open http://localhost:3000. The page at the top lists links for common scenarios: analytics-only ratings, skipping the email step, hiding the comment disclaimer, Spanish, and loading `feedback-widget.min.js` instead of the source. You can also set the boolean attributes (`only-save-rating-to-analytics`, `show-comment-disclaimer`, `skip-email-step`) and `lang` through the query string, e.g. `/?skip-email-step=true&lang=es`. `contact-link` is fixed, because the widget renders it into the page unescaped. The terminal prints every request body and the record the mock saved. Analytics events are logged to the browser console.
 
-`feedback-widget.js` isn't changed for this. When the dev server serves the file, it swaps the production `API_URL` for the local mock (`/api`), so you can't commit a dev URL by mistake. If `API_URL` changes, the server shows an error until `PROD_API_URL` in `dev/server.js` is updated to match. Reload the page to pick up edits; the server doesn't cache.
+`feedback-widget.js` isn't changed for this. When the dev server serves the file, it replaces the value of the `API_URL` constant with the local mock (`/api`), so you can't commit a dev URL by mistake. If `API_URL` is renamed or no longer set to a plain string, the server shows an error instead of letting requests reach production. Reload the page to pick up edits; the server doesn't cache.
 
 To test the error and retry states, make endpoints fail:
 

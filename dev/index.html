@@ -65,20 +65,28 @@
     </main>
 
     <script>
-      const ATTRIBUTES = {
-        "contact-link": "https://nj.gov/nj/feedback.html",
+      // Boolean attributes that can be overridden from the query string.
+      // contact-link is deliberately fixed: the widget renders it into an
+      // href via innerHTML, so taking it from the URL would allow injection.
+      const BOOLEAN_ATTRIBUTES = {
         "only-save-rating-to-analytics": "false",
         "show-comment-disclaimer": "true",
         "skip-email-step": "false",
       };
       const params = new URLSearchParams(window.location.search);
       const widget = document.getElementById("widget");
+      widget.setAttribute("contact-link", "https://nj.gov/nj/feedback.html");
 
-      const current = Object.entries(ATTRIBUTES).map(([name, fallback]) => {
-        const value = params.get(name) ?? fallback;
-        widget.setAttribute(name, value);
-        return `${name}="${value}"`;
-      });
+      const current = Object.entries(BOOLEAN_ATTRIBUTES).map(
+        ([name, fallback]) => {
+          const requested = params.get(name);
+          const value = ["true", "false"].includes(requested)
+            ? requested
+            : fallback;
+          widget.setAttribute(name, value);
+          return `${name}="${value}"`;
+        }
+      );
       const source = params.has("min")
         ? "feedback-widget.min.js"
         : "feedback-widget.js";

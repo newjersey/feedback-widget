@@ -1,12 +1,7 @@
 /**
  * @jest-environment node
  */
-const {
-  createServer,
-  parseArgs,
-  PROD_API_URL,
-  MOCK_API_PATH,
-} = require("./server.js");
+const { createServer, parseArgs, MOCK_API_PATH } = require("./server.js");
 
 let server;
 let baseUrl;
@@ -37,8 +32,8 @@ describe("dev server", () => {
       const response = await fetch(`${baseUrl}/${file}`);
       const source = await response.text();
       expect(response.status).toBe(200);
-      expect(source).not.toContain(PROD_API_URL);
-      expect(source).toContain(`"${MOCK_API_PATH}"`);
+      expect(source).toMatch(/\bAPI_URL\s*=\s*"\/api"/);
+      expect(source).not.toMatch(/innovation\.nj\.gov\/app\/feedback/);
     }
   });
 

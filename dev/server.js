@@ -14,7 +14,10 @@ const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const PROD_API_URL = "https://innovation.nj.gov/app/feedback/dev";
+// Matches `const API_URL = "..."` in the source and `API_URL="..."` in the
+// minified build. The value is replaced whatever it is, so this keeps working
+// if the production URL changes.
+const API_URL_DECLARATION = /(\bAPI_URL\s*=\s*)"[^"]*"/;
 const MOCK_API_PATH = "/api";
 const ROOT = path.resolve(__dirname, "..");
 const ENDPOINTS = ["rating", "comment", "email"];
@@ -165,15 +168,15 @@ const readBody = (req) =>
 const serveStatic = ({ res, entry, logger }) => {
   let content = fs.readFileSync(path.join(ROOT, entry.file), "utf8");
   if (entry.rewriteApiUrl) {
-    if (!content.includes(PROD_API_URL)) {
+    if (!API_URL_DECLARATION.test(content)) {
       // Fail loudly rather than silently sending requests to production.
-      const message = `${entry.file} no longer contains ${PROD_API_URL}; update PROD_API_URL in dev/server.js`;
+      const message = `${entry.file} no longer declares API_URL as a string; update API_URL_DECLARATION in dev/server.js`;
       logger(`[error] ${message}`);
       res.writeHead(500, { "Content-Type": "text/plain" });
       res.end(message);
       return;
     }
-    content = content.replaceAll(PROD_API_URL, MOCK_API_PATH);
+    content = content.replace(API_URL_DECLARATION, `$1"${MOCK_API_PATH}"`);
   }
   res.writeHead(200, {
     "Content-Type": `${entry.type}; charset=utf-8`,
@@ -272,7 +275,8 @@ if (require.main === module) {
     process.exit(1);
   }
 
-  createServer(options).listen(options.port, () => {
+  // Only listen on this machine, not on every network interface.
+  createServer(options).listen(options.port, "localhost", () => {
     log(`Feedback widget dev server: http://localhost:${options.port}`);
     log(`Mock API: http://localhost:${options.port}${MOCK_API_PATH}`);
     if (options.fail.length > 0) {
@@ -284,4 +288,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { createServer, parseArgs, PROD_API_URL, MOCK_API_PATH };
+module.exports = { createServer, parseArgs, MOCK_API_PATH };
