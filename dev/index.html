@@ -95,6 +95,7 @@
 
       // Stand-in for Google Analytics so analytics-only ratings are visible.
       window.gtag = (...args) => {
+        // biome-ignore lint/suspicious/noConsole: the dev page logs analytics events to the console so they can be inspected.
         window.console.info("[analytics]", ...args);
       };
 
