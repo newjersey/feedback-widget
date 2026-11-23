@@ -67,7 +67,7 @@ import "@newjersey/feedback-widget/feedback-widget.min.js";
 3. If using TypeScript, add the following type definition to the file where you added the import
 
 ```typescript
-declare global {
+declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
       "feedback-widget": React.DetailedHTMLProps<
