@@ -28,10 +28,10 @@
     "feedback-widget.min.js"
   ],
   "devDependencies": {
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.7",
     "@testing-library/dom": "10.4.2",
     "@testing-library/jest-dom": "7.0.1",
-    "@testing-library/user-event": "14.6.8",
+    "@testing-library/user-event": "14.6.10",
     "husky": "^9.1.7",
     "jest": "30.5.2",
     "jest-environment-jsdom": "30.5.2",
