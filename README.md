@@ -89,21 +89,22 @@ declare module "react" {
 
 ### For website without NPM
 
-1. Load the JS file from a CDN link by adding a script tag to your HTML. 
+1. Load the JS file from a CDN link by adding a script tag to your HTML.
 ```javascript
 <script
   src="https://unpkg.com/@newjersey/feedback-widget@{version}/feedback-widget.min.js"
   defer
-></script>
+></script>;
 ```
 
 You can change the version number after the @ sign to match your desired release (https://github.com/newjersey/feedback-widget/releases).
-For example, if the latest version is 0.8.0, you would use the following script tag:: 
+For example, if the latest version is 0.8.0, you would use the following script tag::
+
 ```javascript
 <script
   src="https://unpkg.com/@newjersey/feedback-widget@0.8.0/feedback-widget.min.js"
   defer
-></script>
+></script>;
 ```
 
 2. Render the feedback widget by adding the following tag in your HTML (likely at the bottom of the page). It's like using any other HTML tag.
@@ -117,7 +118,8 @@ For example, if the latest version is 0.8.0, you would use the following script 
 ## Troubleshooting
 
 ### Don't place the feedback widget within a `<form>` element
-The feedback widget itself contains `<form>` elements, and [nesting `<form>` elements is not valid HTML](https://stackoverflow.com/questions/26536861/are-nested-forms-valid-in-html5). 
+
+The feedback widget itself contains `<form>` elements, and [nesting `<form>` elements is not valid HTML](https://stackoverflow.com/questions/26536861/are-nested-forms-valid-in-html5).
 
 Unexpected behavior can occur when the browser attempts to parse and render HTML that is not valid, such as stripping `<form>` tags out, which can break the component's functionality.
 
@@ -126,9 +128,9 @@ Unexpected behavior can occur when the browser attempts to parse and render HTML
 If your site has a [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) (CSP), the following must be true for the feedback widget to function:
 
 1. The site permits fetch requests to the Feedback API URL (`https://innovation.nj.gov/app/feedback/dev`).
-    - Example: add `"https://innovation.nj.gov"` or `"https://*.nj.gov"` to the `connect-src` directive of the CSP.
+   - Example: add `"https://innovation.nj.gov"` or `"https://*.nj.gov"` to the `connect-src` directive of the CSP.
 2. If you're loading the widget from the UNPKG CDN (i.e. for sites without NPM), ensure UNPKG is a valid source in `<script>` elements.
-    - Example: add `"https://unpkg.com"` to the `script-src` or `script-src-elem` directive of the CSP.
+   - Example: add `"https://unpkg.com"` to the `script-src` or `script-src-elem` directive of the CSP.
 
 ### Testing during development
 
@@ -141,7 +143,7 @@ When checking that your implementation is working, don't rely solely on the shar
 Whenever there is a change to `feedback-widget.js`, update the minified file before committing and pushing:
 
 1. `npm install uglify-js -g` (global install, not part of npm project)
-2. `cd feedback-widget && nvm use 18` 
+2. `cd feedback-widget && nvm use 18`
    - NOTE: No need to `cd` if you're already in `feedback-widget`; check the `.nvmrc` for the latest Node version
 3. `uglifyjs feedback-widget.js -c -o feedback-widget.min.js`
 
@@ -184,6 +186,7 @@ Steps to test your updates on a site that embeds the feedback widget can be foun
 ```
 For example, as of mm/dd/yyyy, the latest version is x.x.x, so you would use the following script tag:
 ```
+
 6.  Remember to update the version in the script tag itself.
 
 ## Additional documentation (internal only)

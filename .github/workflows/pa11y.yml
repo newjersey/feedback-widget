@@ -19,12 +19,12 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
-   
+
       - name: Allow Chrome sandbox (unprivileged user namespaces)
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
-    
+
       - name: Install dependencies
         run: npm install pa11y-ci
-      
+
       - name: Run accessibility tests
         run: npx pa11y-ci
