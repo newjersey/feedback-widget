@@ -1,17 +1,25 @@
 {
   "name": "@newjersey/feedback-widget",
-  "version": "0.7.0",
+  "version": "0.8.3",
   "description": "Feedback widget to add to a web page, from the New Jersey Office of Innovation",
   "main": "feedback-widget.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node dev/server.js",
+    "test": "npx jest",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/newjersey/feedback-widget.git"
   },
   "author": "namanaman",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/newjersey/feedback-widget/issues"
   },
@@ -20,14 +28,21 @@
     "feedback-widget.min.js"
   ],
   "devDependencies": {
-    "@testing-library/dom": "10.4.1",
-    "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/user-event": "14.6.1",
-    "jest": "30.2.0",
-    "jest-environment-jsdom": "30.2.0"
+    "@biomejs/biome": "2.6.7",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/user-event": "14.6.10",
+    "husky": "^9.1.7",
+    "jest": "30.5.2",
+    "jest-environment-jsdom": "30.5.2",
+    "lint-staged": "^17.4.1"
   },
-  "type": "module",
   "jest": {
     "testEnvironment": "jsdom"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
   }
 }

@@ -28,13 +28,14 @@ const LANG_TO_CONTENT = {
     commentSubmitLoading: "Sending...",
     commentConfirmation: "Thanks for sharing your thoughts!",
     emailPrompt:
-      "To hear about paid feedback opportunities in the future, join our user testing list.",
+      "Learn about feedback opportunities by joining our mailing list.",
     emailLabel: "Email address",
     emailSubmit: "Join the list",
     emailSubmitLoading: "Joining...",
     errorMessage:
       "Try again, please. We didn't get your answer because of a technical issue.",
     emailConfirmation: "Thanks for signing up!",
+    privacyNoticeLinkText: "Privacy Notice",
   },
   es: {
     ratingPrompt: "¿Encontraste lo que buscabas en esta página?",
@@ -51,13 +52,14 @@ const LANG_TO_CONTENT = {
     commentSubmitLoading: "Enviando...",
     commentConfirmation: "¡Gracias por compartir tus ideas!",
     emailPrompt:
-      "Para conocer mas oportunidades de comentarios pagados en el futuro, sea parte de nuestra lista de prueba de usuarios.",
+      "Suscríbase a nuestro boletín electrónico para enterarse sobre oportunidades para compartir sus comentarios.",
     emailLabel: "Dirección de correo electrónico",
     emailSubmit: "Sea parte de la lista",
     emailSubmitLoading: "Enviando...",
     errorMessage:
       "Por favor, inténtalo de nuevo. No obtuvimos su respuesta debido a un problema técnico.",
     emailConfirmation: "¡Gracias por registrarte!",
+    privacyNoticeLinkText: "Política de privacidad",
   },
 };
 
@@ -143,7 +145,7 @@ class NJFeedbackWidget extends window.HTMLElement {
           if (data.message === "Success" && this.feedbackId != null) {
             this.hideElement("#commentPrompt");
             if (this.getAttribute("skip-email-step") === "true") {
-              this.showElement("#confirmation", "flex");
+              this.showElement("#confirmation", { display: "flex" });
             } else {
               this.showElement("#emailPrompt");
             }
@@ -151,7 +153,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.showElement("#commentSubmitError");
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.showElement("#commentSubmitError");
         })
         .finally(() => {
@@ -189,12 +191,12 @@ class NJFeedbackWidget extends window.HTMLElement {
         .then((data) => {
           if (data.message === "Success" && data.feedbackId != null) {
             this.hideElement("#emailPrompt");
-            this.showElement("#confirmation", "flex");
+            this.showElement("#confirmation", { display: "flex" });
           } else {
             this.showElement("#emailSubmitError");
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.showElement("#emailSubmitError");
         })
         .finally(() => {
@@ -211,10 +213,10 @@ class NJFeedbackWidget extends window.HTMLElement {
     this.rating = rating;
     if (rating) {
       this.hideElement("#commentPromptTextNeg");
-      this.showElement("#commentPromptTextPos");
+      this.showElement("#commentPromptTextPos", { display: "inline" });
     } else {
       this.hideElement("#commentPromptTextPos");
-      this.showElement("#commentPromptTextNeg");
+      this.showElement("#commentPromptTextNeg", { display: "inline" });
     }
 
     this.hideElement("#ratingPrompt");
@@ -245,7 +247,7 @@ class NJFeedbackWidget extends window.HTMLElement {
             this.retryRating = true;
           }
         })
-        .catch((e) => {
+        .catch(() => {
           this.retryRating = true;
         })
         .finally(() => {
@@ -254,8 +256,8 @@ class NJFeedbackWidget extends window.HTMLElement {
     }
   }
 
-  showElement(selector, displayType = "block") {
-    this.querySelector(selector).style.display = displayType;
+  showElement(selector, { display = "block" } = {}) {
+    this.querySelector(selector).style.display = display;
   }
 
   hideElement(selector) {
@@ -287,12 +289,10 @@ class NJFeedbackWidget extends window.HTMLElement {
         <form id="commentForm" data-testid="commentForm">
           <div class="grid-box">
             <div>
-              <label id="commentPromptTextPos" for="comment" class="feedback-text"
-                >${content.commentPromptPositive}</label
-              >
-              <label id="commentPromptTextNeg" for="comment" class="feedback-text"
-                >${content.commentPromptNegative}</label
-              >
+              <label for="comment" class="feedback-text">
+                <span id="commentPromptTextPos">${content.commentPromptPositive}</span>
+                <span id="commentPromptTextNeg">${content.commentPromptNegative}</span>
+              </label>
               ${
                 showCommentDisclaimer
                   ? `<p class="disclaimer-text">
@@ -322,9 +322,9 @@ class NJFeedbackWidget extends window.HTMLElement {
                 class="feedback-button float-right submit-button"
                 type="submit">
                  <span id="commentSubmitText">${content.commentSubmit}</span>
-                 <span id="commentSubmitLoadingText" style="display:none">${
-                   content.commentSubmitLoading
-                 }</span>  
+                 <span id="commentSubmitLoadingText" style="display:none">
+                  ${content.commentSubmitLoading}
+                 </span>  
             </button>
             </div>
           </div>
@@ -338,9 +338,7 @@ class NJFeedbackWidget extends window.HTMLElement {
               <p class="disclaimer-text">${content.emailPrompt}</p>
               </div>
               <div>
-                <label for="email" class="email-label">${
-                  content.emailLabel
-                }</label>
+                <label for="email" class="email-label">${content.emailLabel}</label>
                 <input
                   type="email"
                   id="email"
@@ -361,6 +359,10 @@ class NJFeedbackWidget extends window.HTMLElement {
                     content.emailSubmitLoading
                   }</span>
                </button>
+
+               <p class="link-privacy">
+                <a href="https://nj.gov/nj/privacy.shtml">${content.privacyNoticeLinkText}</a>
+              </p>
             </div>
           </div>
         </form>
@@ -524,6 +526,20 @@ class NJFeedbackWidget extends window.HTMLElement {
       #emailSubmitError,
       #confirmation {
         display: none;
+      }
+
+      .link-privacy {
+        display: inline-block;
+        margin-top: .5rem;
+      }
+      @media screen and (max-width: 450px) {
+       .link-privacy {
+          display: block;
+          text-align: right;
+          padding-top: 1rem;
+          max-width: 100%;
+          clear: both;
+        }
       }
     `;
     document.querySelector("head").appendChild(style);

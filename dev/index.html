@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feedback widget local development</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+      }
+      .dev-panel {
+        padding: 1rem 1.5rem;
+        background: #f2f2f2;
+        border-bottom: 1px solid #ccc;
+        font-size: 0.9rem;
+      }
+      .dev-panel h1 {
+        font-size: 1.1rem;
+        margin: 0 0 0.5rem;
+      }
+      .dev-panel ul {
+        margin: 0.25rem 0 0.75rem;
+        padding-left: 1.25rem;
+      }
+      .dev-panel code {
+        background: #fff;
+        padding: 0 0.25rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="dev-panel" aria-label="Development options">
+      <h1>Feedback widget local development</h1>
+      <p>
+        API requests go to the local mock at <code>/api</code>. Check the
+        terminal running <code>npm run dev</code> for request bodies and saved
+        records. Analytics events are logged to the browser console.
+      </p>
+      <p>Current options: <code id="currentOptions"></code></p>
+      <p>Scenarios:</p>
+      <ul>
+        <li><a href="/">Full flow (rating saved to API)</a></li>
+        <li>
+          <a href="/?only-save-rating-to-analytics=true"
+            >Rating saved to analytics only</a
+          >
+        </li>
+        <li><a href="/?skip-email-step=true">Skip email step</a></li>
+        <li>
+          <a href="/?show-comment-disclaimer=false">Hide comment disclaimer</a>
+        </li>
+        <li><a href="/?lang=es">Spanish</a></li>
+        <li>
+          <a href="/?min">Use feedback-widget.min.js</a> (check the minified
+          build is up to date)
+        </li>
+      </ul>
+      <button type="button" id="toggleLanguage">Toggle language (en/es)</button>
+    </section>
+
+    <main>
+      <feedback-widget id="widget"></feedback-widget>
+    </main>
+
+    <script>
+      // Boolean attributes that can be overridden from the query string.
+      // contact-link is deliberately fixed: the widget renders it into an
+      // href via innerHTML, so taking it from the URL would allow injection.
+      const BOOLEAN_ATTRIBUTES = {
+        "only-save-rating-to-analytics": "false",
+        "show-comment-disclaimer": "true",
+        "skip-email-step": "false",
+      };
+      const params = new URLSearchParams(window.location.search);
+      const widget = document.getElementById("widget");
+      widget.setAttribute("contact-link", "https://nj.gov/nj/feedback.html");
+
+      const current = Object.entries(BOOLEAN_ATTRIBUTES).map(
+        ([name, fallback]) => {
+          const requested = params.get(name);
+          const value = ["true", "false"].includes(requested)
+            ? requested
+            : fallback;
+          widget.setAttribute(name, value);
+          return `${name}="${value}"`;
+        }
+      );
+      const source = params.has("min")
+        ? "feedback-widget.min.js"
+        : "feedback-widget.js";
+      const summary = `${current.join(" ")} (${source})`;
+      document.getElementById("currentOptions").textContent = summary;
+
+      // Stand-in for Google Analytics so analytics-only ratings are visible.
+      window.gtag = (...args) => {
+        window.console.info("[analytics]", ...args);
+      };
+
+      let language = params.get("lang") ?? "en";
+      document
+        .getElementById("toggleLanguage")
+        .addEventListener("click", (e) => {
+          language = language === "en" ? "es" : "en";
+          e.target.dispatchEvent(
+            new CustomEvent("changeLanguage", {
+              detail: language,
+              bubbles: true,
+            })
+          );
+        });
+
+      // Attributes are set before the widget script loads and renders.
+      const script = document.createElement("script");
+      script.src = `/${source}`;
+      document.head.append(script);
+    </script>
+  </body>
+</html>

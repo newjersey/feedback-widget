@@ -49,6 +49,10 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 | `show-comment-disclaimer`       | A boolean that can be used to determine whether disclaimer text should be displayed in the feedback widget when users are prompted to submit a comment. This disclaimer will direct users to a separate contact form link if they have specific questions. | `"true"` or `"false"` | `"true"`                                                  | N/A                                                                                                                                                         | N/A                                                       |
 | `skip-email-step`               | A boolean that can be used to determine whether to prompt the user to enter their email to join a testing group after submitting a comment.                                                                                                                | `"true"` or `"false"` | `"false"`                                                 | N/A                                                                                                                                                         | N/A                                                       |
 
+### Backend
+
+This frontend component is meant for use on New Jersey pages, and is hardcoded to sent feedback to a running instance of the [Feedback Widget API](https://github.com/newjersey/feedback-api/) hosted by the Platform Team. To access the feedback collected by the frontend widget for, please contact the Platform Team.
+
 ## How to add this to your website
 
 ### With Node/NPM
@@ -60,7 +64,7 @@ document.getElementById("languageButton").addEventListener("click", (e) => {
 import "@newjersey/feedback-widget/feedback-widget.min.js";
 ```
 
-3. If using TypeScript, add the following type definition to the same file you imported
+3. If using TypeScript, add the following type definition to the file where you added the import
 
 ```typescript
 declare global {
@@ -94,10 +98,10 @@ declare global {
 ```
 
 You can change the version number after the @ sign to match your desired release (https://github.com/newjersey/feedback-widget/releases).
-For example, as of 10/27/2025, the latest version is 0.7.0 so you would use the following script tag: 
+For example, if the latest version is 0.8.0, you would use the following script tag:: 
 ```javascript
 <script
-  src="https://unpkg.com/@newjersey/feedback-widget@0.7.0/feedback-widget.min.js"
+  src="https://unpkg.com/@newjersey/feedback-widget@0.8.0/feedback-widget.min.js"
   defer
 ></script>
 ```
@@ -126,6 +130,9 @@ If your site has a [Content Security Policy](https://developer.mozilla.org/en-US
 2. If you're loading the widget from the UNPKG CDN (i.e. for sites without NPM), ensure UNPKG is a valid source in `<script>` elements.
     - Example: add `"https://unpkg.com"` to the `script-src` or `script-src-elem` directive of the CSP.
 
+### Testing during development
+
+When checking that your implementation is working, don't rely solely on the shared Looker Dashboard because the pipeline from Google Sheets to Looker can be very delayed. Instead, look for an `HTTP 200` response containing `{message: "Success", feedbackId: number}`. If you need, the NJIA Platform team can verify the `feedbackId` is valid.
 
 ## [FOR DEVELOPERS] How to improve this component
 
@@ -138,6 +145,31 @@ Whenever there is a change to `feedback-widget.js`, update the minified file bef
    - NOTE: No need to `cd` if you're already in `feedback-widget`; check the `.nvmrc` for the latest Node version
 3. `uglifyjs feedback-widget.js -c -o feedback-widget.min.js`
 
+### Running locally
+
+The widget needs the Feedback API to get through the full rating → comment → email flow. `npm run dev` starts a local server that serves the widget and a mock of the API, so you can test every step without AWS access and without writing to the prod Google Sheet.
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000. The page at the top lists links for common scenarios: analytics-only ratings, skipping the email step, hiding the comment disclaimer, Spanish, and loading `feedback-widget.min.js` instead of the source. You can also set the boolean attributes (`only-save-rating-to-analytics`, `show-comment-disclaimer`, `skip-email-step`) and `lang` through the query string, e.g. `/?skip-email-step=true&lang=es`. `contact-link` is fixed, because the widget renders it into the page unescaped. The terminal prints every request body and the record the mock saved. Analytics events are logged to the browser console.
+
+`feedback-widget.js` isn't changed for this. When the dev server serves the file, it replaces the value of the `API_URL` constant with the local mock (`/api`), so you can't commit a dev URL by mistake. If `API_URL` is renamed or no longer set to a plain string, the server shows an error instead of letting requests reach production. Reload the page to pick up edits; the server doesn't cache.
+
+To test the error and retry states, make endpoints fail:
+
+```bash
+npm run dev -- --fail=rating                    # rating returns 500; the comment step should re-send the rating
+npm run dev -- --fail=comment,email             # comment and email return 500
+npm run dev -- --fail=email --fail-mode=network # the connection drops, so fetch rejects
+npm run dev -- --delay=2000                     # slow responses, to check the loading text
+npm run dev -- --port=4000
+```
+
+The mock copies the real API's validation and response shapes, including returning 500 for invalid submissions, and uses sheet row numbers as `feedbackId`s starting at 2. It does not redact PII from comments, and data is lost when the server stops. Before a release, it's still worth checking against the deployed API (see "Test API requests in the browser" in the [feedback-api README](https://github.com/newjersey/feedback-api#test-api-requests-in-the-browser)). That path writes to the prod Google Sheet.
+
 ### Testing your updates
 
 Steps to test your updates on a site that embeds the feedback widget can be found in [Feedback Widget Testing via DevTools](https://docs.google.com/document/d/1QYVS7VryECW87C5CqLyZQF_wbnHPxZcZ9ThHLzgxLW8/edit?tab=t.0#heading=h.xklo0mrls5cd).
@@ -148,6 +180,11 @@ Steps to test your updates on a site that embeds the feedback widget can be foun
 2. Confirm this worked by checking that `package.json` version has been bumped and a draft release for this version is available in the [Releases page](https://github.com/newjersey/feedback-widget/releases).
 3. Click to Edit the new release, and update the description if needed. Click "Publish." This will trigger the publish-release Github Actions workflow.
 4. Once the workflow is completed, confirm that the package is updated on [NPM registry](https://www.npmjs.com/package/@newjersey/feedback-widget).
+5. Under [**For website without NPM**](https://github.com/newjersey/feedback-widget/tree/refs/heads/main?tab=readme-ov-file#for-website-without-npm), update the current version and as of date in the example sentence:
+```
+For example, as of mm/dd/yyyy, the latest version is x.x.x, so you would use the following script tag:
+```
+6.  Remember to update the version in the script tag itself.
 
 ## Additional documentation (internal only)
 
